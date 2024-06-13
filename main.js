@@ -1,62 +1,181 @@
-const config = {
-    type: Phaser.AUTO,
-    width: 800,
-    height: 600,
-    backgroundColor: '#87CEEB',
-    parent: 'game-container',
-    scene: {
-        preload: preload,
-        create: create,
-        update: update
+var Home = new Phaser.Class({
+    Extends: Phaser.Scene,
+    initialize: function () {
+        Phaser.Scene.call(this, {key: 'Home'});
+    },
+    init: function () {
+    },
+    preload: function () {
+        this.load.svg('background', 'assets/raum_middle.svg');
+        this.load.svg('drache_oben', 'assets/Drache_rechts_oben.svg');
+        this.load.svg('drache_mitte2', 'assets/Drache_rechts_mitte2.svg');
+        this.load.svg('drache_mitte', 'assets/Drache_rechts_mitte.svg');
+        this.load.svg('drache_unten', 'assets/Drache_rechts_unten.svg');
+    },
+    create: function () {
+        scene = this;
+
+        background = this.add.image(this.cameras.main.width / 2, this.cameras.main.height / 2, 'background').setScale(0.9)
+
+        dragonFrames = [
+            this.add.image(800, 300, 'drache_unten').setVisible(false),
+            this.add.image(800, 300, 'drache_mitte').setVisible(false),
+            this.add.image(800, 300, 'drache_mitte2').setVisible(false),
+            this.add.image(800, 300, 'drache_oben').setVisible(false)
+        ];
+        dragon = dragonFrames[0];
+        dragon.setVisible(true);
+
+        //  Input Events
+        cursors = this.input.keyboard.createCursorKeys();
+
+        // Animation der Flügel
+        this.time.addEvent({
+            delay: 250, // alle 250 ms wechseln
+            callback: animateWings,
+            callbackScope: this,
+            loop: true
+        });
+
+    },
+    update: function () {
+        frameDelay++;
+        const bobSpeed = 0.1;
+        dragon.y = 300 + Math.sin(frameDelay * bobSpeed) * 10;
+        dragonFrames.forEach(frame => frame.y = dragon.y);
+
+        const moveSpeed = 5;
+
+        // Bewegen des Drachen mit Pfeiltasten
+        if (cursors.left.isDown) {
+            dragon.x -= moveSpeed;
+            dragonFrames.forEach(frame => frame.x = dragon.x);
+            dragonFrames.forEach(frame => frame.setScale(-1, 1));
+        } else if (cursors.right.isDown) {
+            dragon.x += moveSpeed;
+            dragonFrames.forEach(frame => frame.x = dragon.x);
+            dragonFrames.forEach(frame => frame.setScale(1, 1));
+        }
+
+        // Wechseln der Szene durch Leertaste
+        this.input.keyboard.on('keydown-SPACE', function () {
+            this.scene.start('Minigame');
+        }, this);
     }
-};
+});
 
-const game = new Phaser.Game(config);
+var Minigame = new Phaser.Class({
+    Extends: Phaser.Scene,
+    initialize: function () {
+        Phaser.Scene.call(this, {key: 'Minigame'});
+    },
+    init: function () {
+    },
+    preload: function () {
+        this.load.svg('drache_oben', 'assets/Drache_rechts_oben.svg');
+        this.load.svg('drache_mitte2', 'assets/Drache_rechts_mitte2.svg');
+        this.load.svg('drache_mitte', 'assets/Drache_rechts_mitte.svg');
+        this.load.svg('drache_unten', 'assets/Drache_rechts_unten.svg');
+        this.load.image('sky', 'assets/sky.png');
+        this.load.image('star', 'assets/star.png');
+        this.load.image('bomb', 'assets/bomb.png');
+    },
+    create: function () {
+        scene = this;
 
-function preload() {
-    this.load.svg('drache_oben', 'Drache_rechts_oben.svg');
-    this.load.svg('drache_mitte2', 'Drache_rechts_mitte2.svg');
-    this.load.svg('drache_mitte', 'Drache_rechts_mitte.svg');
-    this.load.svg('drache_unten', 'Drache_rechts_unten.svg');
-}
+        var image = this.add.image(this.cameras.main.width / 2, this.cameras.main.height / 2, 'sky')
+        var scaleX = this.cameras.main.width / image.width;
+        var scaleY = this.cameras.main.height / image.height;
+        var scale = Math.max(scaleX, scaleY)
+        image.setScale(scale).setScrollFactor(0)
+
+        dragonFrames = [
+            this.add.image(400, 500, 'drache_unten').setVisible(false),
+            this.add.image(400, 500, 'drache_mitte').setVisible(false),
+            this.add.image(400, 500, 'drache_mitte2').setVisible(false),
+            this.add.image(400, 500, 'drache_oben').setVisible(false)
+        ];
+        dragon = dragonFrames[0];
+        dragon.setVisible(true);
+        player = this.physics.add.group(dragon);
+
+        //  Input Events
+        cursors = this.input.keyboard.createCursorKeys();
+
+        //  The score
+        scoreText = this.add.text(16, 16, 'score: 0', {fontSize: '32px', fill: '#000'});
+
+        // Animation der Flügel
+        this.time.addEvent({
+            delay: 250, // alle 250 ms wechseln
+            callback: animateWings,
+            callbackScope: this,
+            loop: true
+        });
+
+        // Generieren der Sterne
+        stars = this.physics.add.group({
+            key: 'star',
+            repeat: 1,
+            setXY: {x: 1800, y: 0, stepX: 70}
+        });
+
+        stars.children.iterate(function (child) {
+            child.y = Phaser.Math.Between(0, 800);
+            child.setVelocityX(-starSpeed);
+        });
+
+        this.time.addEvent({
+            delay: 5000, // Generationszeit in ms
+            callback: spawnStar,
+            callbackScope: this,
+            loop: true
+        });
+
+        //  Checks to see if the player overlaps with any of the stars, if he does call the collectStar function
+        this.physics.add.overlap(player, stars, collectStar, null, this);
+    },
+    update: function () {
+        frameDelay++;
+        dragonFrames.forEach(frame => frame.y = dragon.y);
+
+        const moveSpeed = 5;
+
+        // Bewegen des Drachen mit Pfeiltasten
+        if (cursors.up.isDown) {
+            dragon.y -= moveSpeed;
+            dragonFrames.forEach(frame => frame.y = dragon.y);
+        } else if (cursors.down.isDown) {
+            dragon.y += moveSpeed;
+            dragonFrames.forEach(frame => frame.y = dragon.y);
+        }
+
+        stars.children.iterate(function (child) {
+            if (child.x < 5) {
+                this.physics.pause();
+                player.setTint(0xff0000);
+                this.add.text(this.cameras.main.width / 2, this.cameras.main.height / 2, 'GAMEOVER', {fontSize: '64px', fill: '#000'});
+                gameOver = true;
+            }
+        });
+
+        // Wechseln der Szene durch Leertaste
+        this.input.keyboard.on('keydown-SPACE', function () {
+            this.scene.start('Home');
+        }, this);
+    }
+});
 
 let dragon;
 let dragonFrames;
 let frameIndex = 0;
 let frameDelay = 0;
-let targetX = 400; // Startposition des Drachen auf der X-Achse
 let scene;
 
-function create() {
-    scene = this;
-    dragonFrames = [
-        this.add.image(400, 300, 'drache_unten').setVisible(false),
-        this.add.image(400, 300, 'drache_mitte').setVisible(false),
-        this.add.image(400, 300, 'drache_mitte2').setVisible(false),
-        this.add.image(400, 300, 'drache_oben').setVisible(false)
-    ];
-    dragon = dragonFrames[0];
-    dragon.setVisible(true);
-
-    this.input.on('pointerdown', function (pointer) {
-        targetX = pointer.x; // Setzt die Zielposition auf der X-Achse auf die X-Koordinate des Mausklicks
-        // Spiegeln des Drachen basierend auf der Klickposition
-        if (targetX < dragon.x) {
-            dragonFrames.forEach(frame => frame.setScale(-1, 1));
-        } else {
-            dragonFrames.forEach(frame => frame.setScale(1, 1));
-        }
-        moveToTarget();
-    });
-
-    // Animation der Flügel
-    this.time.addEvent({
-        delay: 250, // alle 250 ms wechseln
-        callback: animateWings,
-        callbackScope: this,
-        loop: true
-    });
-}
+let stars;
+let starSpeed = 200;
+var score = 0;
+var gameOver = false;
 
 function animateWings() {
     dragonFrames[frameIndex].setVisible(false);
@@ -65,21 +184,34 @@ function animateWings() {
     dragon.setVisible(true);
 }
 
-function moveToTarget() {
-    scene.tweens.add({
-        targets: dragonFrames,
-        x: targetX,
-        duration: 1000, // Dauer der Bewegung (in ms)
-        ease: 'Power2',
-        onUpdate: function(tween, target) {
-            dragonFrames.forEach(frame => frame.x = target.x);
-        }
-    });
+function spawnStar() {
+    let star = stars.create(800, Phaser.Math.Between(0, 600), 'star');
+    star.setVelocityX(-starSpeed);
 }
 
-function update() {
-    frameDelay++;
-    const bobSpeed = 0.1;
-    dragon.y = 300 + Math.sin(frameDelay * bobSpeed) * 10;
-    dragonFrames.forEach(frame => frame.y = dragon.y);
+function collectStar(player, star) {
+    star.disableBody(true, true);
+
+    //  Add and update the score
+    score += 1;
+    scoreText.setText('Score: ' + score);
 }
+
+const phaserConfig = {
+    type: Phaser.AUTO,
+    parent: "game-container",
+    width: '100%',
+    height: '100%',
+    physics: {
+        default: 'arcade',
+        arcade: {
+            debug: false
+        }
+    },
+    pixelArt: true,
+    backgroundColor: "#87CEEB",
+    scene: [Home, Minigame]
+};
+
+const game = new Phaser.Game(phaserConfig);
+
