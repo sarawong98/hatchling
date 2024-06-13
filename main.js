@@ -18,10 +18,10 @@ var Home = new Phaser.Class({
         background = this.add.image(this.cameras.main.width / 2, this.cameras.main.height / 2, 'background').setScale(0.9)
 
         dragonFrames = [
-            this.add.image(800, 300, 'drache_unten').setVisible(false),
-            this.add.image(800, 300, 'drache_mitte').setVisible(false),
-            this.add.image(800, 300, 'drache_mitte2').setVisible(false),
-            this.add.image(800, 300, 'drache_oben').setVisible(false)
+            this.add.image(this.cameras.main.width / 2, 600, 'drache_unten').setVisible(false),
+            this.add.image(this.cameras.main.width / 2, 600, 'drache_mitte').setVisible(false),
+            this.add.image(this.cameras.main.width / 2, 600, 'drache_mitte2').setVisible(false),
+            this.add.image(this.cameras.main.width / 2, 600, 'drache_oben').setVisible(false)
         ];
         dragon = dragonFrames[0];
         dragon.setVisible(true);
@@ -39,9 +39,13 @@ var Home = new Phaser.Class({
 
     },
     update: function () {
+        if (gameover) {
+            gameover = false;
+        }
+
         frameDelay++;
         const bobSpeed = 0.1;
-        dragon.y = 300 + Math.sin(frameDelay * bobSpeed) * 10;
+        dragon.y = 500 + Math.sin(frameDelay * bobSpeed) * 10;
         dragonFrames.forEach(frame => frame.y = dragon.y);
 
         const moveSpeed = 5;
@@ -116,8 +120,8 @@ var Minigame = new Phaser.Class({
         // Generieren der Sterne
         stars = this.physics.add.group({
             key: 'star',
-            repeat: 1,
-            setXY: {x: 1800, y: 0, stepX: 70}
+            repeat: 0,
+            setXY: {x: 1900, y: 0, stepX: 0}
         });
 
         stars.children.iterate(function (child) {
@@ -126,7 +130,7 @@ var Minigame = new Phaser.Class({
         });
 
         this.time.addEvent({
-            delay: 5000, // Generationszeit in ms
+            delay: 2000, // Generationszeit in ms
             callback: spawnStar,
             callbackScope: this,
             loop: true
@@ -136,6 +140,10 @@ var Minigame = new Phaser.Class({
         this.physics.add.overlap(player, stars, collectStar, null, this);
     },
     update: function () {
+        if (gameover) {
+            this.scene.start('Gameover');
+        }
+
         frameDelay++;
         dragonFrames.forEach(frame => frame.y = dragon.y);
 
@@ -152,17 +160,38 @@ var Minigame = new Phaser.Class({
 
         stars.children.iterate(function (child) {
             if (child.x < 5) {
-                this.physics.pause();
-                player.setTint(0xff0000);
-                this.add.text(this.cameras.main.width / 2, this.cameras.main.height / 2, 'GAMEOVER', {fontSize: '64px', fill: '#000'});
-                gameOver = true;
+                gameover = true;
             }
         });
+    }
+});
 
+var Gameover = new Phaser.Class({
+    Extends: Phaser.Scene,
+    initialize: function () {
+        Phaser.Scene.call(this, {key: 'Gameover'});
+    },
+    init: function () {
+    },
+    preload: function () {
+    },
+    create: function () {
+        scene = this;
+
+        this.add.text(this.cameras.main.width / 2, this.cameras.main.height / 2, 'GAMEOVER', {
+            fontSize: '64px',
+            fill: '#ff0000'
+        });
+        this.add.text(this.cameras.main.width / 2, this.cameras.main.height / 1.7, 'Total: ' + score, {
+            fontSize: '48px',
+            fill: '#ff0000'
+        });
         // Wechseln der Szene durch Leertaste
         this.input.keyboard.on('keydown-SPACE', function () {
             this.scene.start('Home');
         }, this);
+    },
+    update: function () {
     }
 });
 
@@ -175,7 +204,9 @@ let scene;
 let stars;
 let starSpeed = 200;
 var score = 0;
-var gameOver = false;
+var gameover = false;
+var gameOverText;
+var gameOverScore;
 
 function animateWings() {
     dragonFrames[frameIndex].setVisible(false);
@@ -185,7 +216,7 @@ function animateWings() {
 }
 
 function spawnStar() {
-    let star = stars.create(800, Phaser.Math.Between(0, 600), 'star');
+    let star = stars.create(1900, Phaser.Math.Between(0, 800), 'star');
     star.setVelocityX(-starSpeed);
 }
 
@@ -210,7 +241,7 @@ const phaserConfig = {
     },
     pixelArt: true,
     backgroundColor: "#87CEEB",
-    scene: [Home, Minigame]
+    scene: [Home, Minigame, Gameover ]
 };
 
 const game = new Phaser.Game(phaserConfig);
