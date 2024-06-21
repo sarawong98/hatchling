@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg id="Ebene_1" data-name="Ebene 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 96 81.02">
+  <defs>
+    <style>
+      .cls-1 {
+        fill: #404a9a;
+        stroke-width: 0px;
+      }
+    </style>
+  </defs>
+  <g>
+    <rect class="cls-1" x="90.5" y="75.53" width="5.5" height="5.49"/>
+    <rect class="cls-1" x="90.5" y="53.57" width="5.5" height="5.49"/>
+    <rect class="cls-1" x="90.5" y="48.07" width="5.5" height="5.49"/>
+    <rect class="cls-1" x="85.01" y="75.53" width="5.49" height="5.49"/>
+    <rect class="cls-1" x="85.01" y="59.06" width="5.49" height="5.49"/>
+    <rect class="cls-1" x="85.01" y="48.07" width="5.49" height="5.49"/>
+    <rect class="cls-1" x="79.52" y="75.53" width="5.49" height="5.49"/>
+    <rect class="cls-1" x="79.52" y="64.55" width="5.49" height="5.49"/>
+    <rect class="cls-1" x="79.52" y="48.07" width="5.49" height="5.49"/>
+    <rect class="cls-1" x="74.03" y="75.53" width="5.49" height="5.49"/>
+    <rect class="cls-1" x="74.03" y="70.04" width="5.49" height="5.49"/>
+    <rect class="cls-1" x="74.03" y="48.07" width="5.49" height="5.49"/>
+  </g>
+  <g>
+    <rect class="cls-1" x="61.73" y="59.06" width="5.49" height="5.49"/>
+    <rect class="cls-1" x="61.73" y="31.6" width="5.49" height="5.49"/>
+    <rect class="cls-1" x="61.73" y="26.11" width="5.49" height="5.49"/>
+    <rect class="cls-1" x="56.24" y="59.06" width="5.49" height="5.49"/>
+    <rect class="cls-1" x="56.24" y="37.09" width="5.49" height="5.49"/>
+    <rect class="cls-1" x="56.24" y="26.11" width="5.49" height="5.49"/>
+    <rect class="cls-1" x="50.74" y="59.06" width="5.5" height="5.49"/>
+    <rect class="cls-1" x="50.74" y="42.58" width="5.5" height="5.49"/>
+    <rect class="cls-1" x="50.74" y="26.11" width="5.5" height="5.49"/>
+    <rect class="cls-1" x="45.25" y="59.06" width="5.49" height="5.49"/>
+    <rect class="cls-1" x="45.25" y="48.07" width="5.49" height="5.49"/>
+    <rect class="cls-1" x="45.25" y="26.11" width="5.49" height="5.49"/>
+    <rect class="cls-1" x="39.76" y="59.06" width="5.49" height="5.49"/>
+    <rect class="cls-1" x="39.76" y="53.57" width="5.49" height="5.49"/>
+    <rect class="cls-1" x="39.76" y="26.11" width="5.49" height="5.49"/>
+  </g>
+  <g>
+    <rect class="cls-1" x="27.46" width="5.49" height="5.49"/>
+    <rect class="cls-1" x="21.97" width="5.49" height="5.49"/>
+    <rect class="cls-1" x="16.48" width="5.49" height="5.49"/>
+    <rect class="cls-1" x="10.98" width="5.5" height="5.49"/>
+    <rect class="cls-1" x="5.49" width="5.49" height="5.49"/>
+    <rect class="cls-1" width="5.49" height="5.49"/>
+    <rect class="cls-1" x="27.46" y="38.45" width="5.49" height="5.49"/>
+    <rect class="cls-1" x="27.46" y="5.49" width="5.49" height="5.49"/>
+    <rect class="cls-1" x="21.97" y="38.45" width="5.49" height="5.49"/>
+    <rect class="cls-1" x="21.97" y="10.98" width="5.49" height="5.49"/>
+    <rect class="cls-1" x="16.48" y="38.45" width="5.49" height="5.49"/>
+    <rect class="cls-1" x="16.48" y="16.48" width="5.49" height="5.49"/>
+    <rect class="cls-1" x="10.98" y="38.45" width="5.5" height="5.49"/>
+    <rect class="cls-1" x="10.98" y="21.97" width="5.5" height="5.49"/>
+    <rect class="cls-1" x="5.49" y="38.45" width="5.49" height="5.49"/>
+    <rect class="cls-1" x="5.49" y="27.46" width="5.49" height="5.5"/>
+    <rect class="cls-1" y="38.45" width="5.49" height="5.49"/>
+    <rect class="cls-1" y="32.96" width="5.49" height="5.49"/>
+  </g>
+</svg>
