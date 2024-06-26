@@ -13,9 +13,10 @@ let cursors;
 let backgroundAtEdge = false;
 let pfeil1, pfeil2, pfeil3;
 let selectedObject = null;
-let stars;
-let starSpeed = 200;
+let hoops;
+let hoopSpeed = 200;
 let score = 0;
+let gameover = false;
 
 const xDistanceThreshold = 200; // Distanzschwelle für die Auswahl der Pfeile nach x-Koordinate
 

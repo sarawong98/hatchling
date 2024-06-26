@@ -1,17 +1,16 @@
-//Flyinggame
 export default class Flyinggame extends Phaser.Scene {
     constructor() {
-        super({ key: 'Flyinggame' });
+        super({key: 'Flyinggame'});
 
         // Variablen als Instanzvariablen der Klasse deklarieren
         this.score = 0;
         this.scoreText = null;
         this.dragonFrames = [];
         this.frameIndex = 0;
-        this.starSpeed = 100;
+        this.hoopSpeed = 100;
         this.gameover = false;
         this.player = null;
-        this.stars = null;
+        this.hoops = null;
     }
 
     preload() {
@@ -21,6 +20,8 @@ export default class Flyinggame extends Phaser.Scene {
         this.load.svg('drache_unten', 'Komponenten/Drache_rechts_unten.svg');
         this.load.image('sky', 'Komponenten/sky.png');
         this.load.image('star', 'Komponenten/star.png');
+        this.load.image('hoop_front', 'Komponenten/Reifen_vorne.svg');
+        this.load.image('hoop_back', 'Komponenten/Reifen_hinten.svg');
     }
 
     create() {
@@ -30,15 +31,15 @@ export default class Flyinggame extends Phaser.Scene {
         var scaleX = this.cameras.main.width / image.width;
         var scaleY = this.cameras.main.height / image.height;
         var scale = Math.max(scaleX, scaleY);
-        image.setScale(scale).setScrollFactor(0);
+        image.setScale(scale).setScrollFactor(0).setDepth(0);
 
         this.dragonFrames = [
-            this.add.image(400, 500, 'drache_unten').setVisible(false).setScale(0.75),
-            this.add.image(400, 500, 'drache_mitte').setVisible(false).setScale(0.75),
-            this.add.image(400, 500, 'drache_mitte2').setVisible(false).setScale(0.75),
-            this.add.image(400, 500, 'drache_oben').setVisible(false).setScale(0.75),
-            this.add.image(400, 500, 'drache_mitte2').setVisible(false).setScale(0.75),
-            this.add.image(400, 500, 'drache_mitte').setVisible(false).setScale(0.75)
+            this.add.image(400, 500, 'drache_unten').setVisible(false).setScale(0.75).setDepth(2),
+            this.add.image(400, 500, 'drache_mitte').setVisible(false).setScale(0.75).setDepth(2),
+            this.add.image(400, 500, 'drache_mitte2').setVisible(false).setScale(0.75).setDepth(2),
+            this.add.image(400, 500, 'drache_oben').setVisible(false).setScale(0.75).setDepth(2),
+            this.add.image(400, 500, 'drache_mitte2').setVisible(false).setScale(0.75).setDepth(2),
+            this.add.image(400, 500, 'drache_mitte').setVisible(false).setScale(0.75).setDepth(2)
         ];
         this.dragon = this.dragonFrames[0];
         this.dragon.setVisible(true);
@@ -52,7 +53,7 @@ export default class Flyinggame extends Phaser.Scene {
         this.cursors = this.input.keyboard.createCursorKeys();
 
         // The score
-        this.scoreText = this.add.text(16, 16, 'Score: 0', { fontSize: '32px', fill: '#000' });
+        this.scoreText = this.add.text(16, 16, 'Score: 0', {fontSize: '32px', fill: '#000'});
 
         // Animation der Flügel
         this.time.addEvent({
@@ -62,33 +63,28 @@ export default class Flyinggame extends Phaser.Scene {
             loop: true
         });
 
-        // Generieren der Sterne
-        this.stars = this.physics.add.group({
-            key: 'star',
-            repeat: 0,
-            setXY: { x: 1900, y: 0, stepX: 0 }
-        });
+        // Generate hoops
+        this.hoops = this.physics.add.group();
 
-        this.stars.children.iterate(function (child) {
-            child.y = Phaser.Math.Between(0, 800);
-            child.setScale(1.5); // Sterne vergrößern
-            child.setVelocityX(-this.starSpeed);
-        }, this);
+        this.spawnHoop();
 
         this.time.addEvent({
             delay: 2000, // Generationszeit in ms
-            callback: this.spawnStar,
+            callback: this.spawnHoop,
             callbackScope: this,
             loop: true
         });
 
-        // Checks to see if the player overlaps with any of the stars, if he does call the collectStar function
-        this.physics.add.overlap(this.player, this.stars, this.collectStar, null, this);
+        // Checks to see if the player overlaps with any of the hoops, if he does call the passThroughHoop function
+        this.physics.add.overlap(this.player, this.hoops.children, this.passThroughHoop, null, this);
+
+        console.log(this);
+
     }
 
     update() {
         if (this.gameover) {
-            this.scene.start('Gameover', { finalScore: this.score });
+            this.scene.start('Gameover', {finalScore: this.score});
         }
 
         this.dragonFrames.forEach(frame => frame.y = this.dragon.y);
@@ -104,11 +100,11 @@ export default class Flyinggame extends Phaser.Scene {
             this.dragonFrames.forEach(frame => frame.y = this.dragon.y);
         }
 
-        this.stars.children.iterate(function (child) {
-            if (child.x < 5) {
+        this.hoops.children.iterate(function (hoop) {
+            if (hoop.x < 5) {
                 this.gameover = true;
             }
-        }, this);
+        });
     }
 
     animateWings() {
@@ -118,17 +114,27 @@ export default class Flyinggame extends Phaser.Scene {
         this.dragon.setVisible(true);
     }
 
-    spawnStar() {
-        const star = this.stars.create(1900, Phaser.Math.Between(0, 800), 'star');
-        star.setScale(1.5); // Sterne vergrößern
-        star.setVelocityX(-this.starSpeed);
+    spawnHoop() {
+        const hoopBack = this.hoops.create(1880, Phaser.Math.Between(0, 800), 'hoop_back').setDepth(1);
+        hoopBack.setVelocityX(-this.hoopSpeed);
+        const hoopFront = this.hoops.create(1900, hoopBack.y, 'hoop_front').setDepth(3);
+        hoopFront.setVelocityX(-this.hoopSpeed);
+
+        const hoop = this.physics.add.group();
+        hoop.rear = hoopBack;
+        hoop.front = hoopFront;
+
+        this.hoops.add(hoop);
     }
 
-    collectStar(dragon, star) {
-        star.disableBody(true, true);
+    passThroughHoop(player, hoop) {
+        console.log(hoop)
 
-        // Score aktualisieren
-        this.score += 1;
-        this.scoreText.setText('Score: ' + this.score);
+        // Disable the hoop parts
+        hoop.disableBody(true, true);
+
+        // Add and update the score
+        score += 1;
+        scoreText.setText('Score: ' + score);
     }
 }
