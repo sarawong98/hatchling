@@ -1,6 +1,6 @@
  export default class Memorygame extends Phaser.Scene {
      constructor() {
-         super({ key: 'memorygame' });
+         super({ key: 'Memorygame' });
 
          // Variablen als Instanzvariablen der Klasse deklarieren
          this.cards = null;

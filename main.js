@@ -4,8 +4,7 @@ import Showergame from "./Showergame.js";
 import Sleepinggame from "./Sleepinggame.js";
 import Flyinggame from "./Flyinggame.js";
 import Gameover from "./Gameover.js";
-import Memorygame from "./Memorygame";
-
+import Memorygame from "./Memorygame.js";
 
 const config = {
     type: Phaser.AUTO,
