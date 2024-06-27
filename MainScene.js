@@ -10,6 +10,7 @@ export default class MainScene extends Phaser.Scene {
         this.load.svg('drache_mitte2', 'Komponenten/Drache_rechts_mitte2.svg');
         this.load.svg('drache_mitte', 'Komponenten/Drache_rechts_mitte.svg');
         this.load.svg('drache_unten', 'Komponenten/Drache_rechts_unten.svg');
+        this.load.svg('tisch', 'Komponenten/tisch.svg');
     }
 
     create() {
@@ -20,6 +21,8 @@ export default class MainScene extends Phaser.Scene {
         pfeil1 = this.add.image(250, 450, 'pfeil').setOrigin(0).setScale(0.4, 0.4).setVisible(false);
         pfeil2 = this.add.image(1250, 450, 'pfeil').setOrigin(0).setScale(0.4, 0.4).setVisible(false);
         pfeil3 = this.add.image(3220, 350, 'pfeil').setOrigin(0).setScale(0.4, 0.4).setVisible(false);
+        pfeil4 = this.add.image(2800, 550, 'pfeil').setOrigin(0).setScale(0.4, 0.4).setVisible(false);
+
 
         // Drachenanimationen
         dragonFrames = [
@@ -32,6 +35,10 @@ export default class MainScene extends Phaser.Scene {
         ];
         dragon = dragonFrames[0];
         dragon.setVisible(true);
+
+
+        // Tisch
+        tisch = this.add.image(2510, 789, 'tisch').setOrigin(0).setScale(1.7, 1.7).setVisible(true);
 
         cursors = this.input.keyboard.createCursorKeys();
 
@@ -51,6 +58,8 @@ export default class MainScene extends Phaser.Scene {
                 this.scene.start('Sleepinggame', { backgroundX: background.x, pfeilX: pfeil2.x });
             } else if (selectedObject === 'pfeil3') {
                 this.scene.start('Flyinggame');
+            } else if (selectedObject === 'pfeil4') {
+                this.scene.start('Memorygame');
             }
         });
     }

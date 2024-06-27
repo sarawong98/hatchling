@@ -11,7 +11,8 @@ let backgroundSpeed = 6;
 let scene;
 let cursors;
 let backgroundAtEdge = false;
-let pfeil1, pfeil2, pfeil3;
+let pfeil1, pfeil2, pfeil3, pfeil4;
+let tisch;
 let selectedObject = null;
 let stars;
 let starSpeed = 200;
@@ -33,6 +34,7 @@ function updatePfeilPositions() {
     pfeil1.y = 450 + Math.sin(frameDelay * bobSpeed) * 10;
     pfeil2.y = 450 + Math.sin((frameDelay + 20) * bobSpeed) * 10; // Slightly offset for variation
     pfeil3.y = 350 + Math.sin((frameDelay + 40) * bobSpeed) * 10; // Slightly offset for variation
+    pfeil4.y = 550 + Math.sin((frameDelay + 60) * bobSpeed) * 10; // Slightly offset for variation
 }
 
 // Check the proximity between the dragon and each pfeil
@@ -40,6 +42,7 @@ function checkPfeilProximity() {
     checkSinglePfeilProximity(pfeil1, 'pfeil1');
     checkSinglePfeilProximity(pfeil2, 'pfeil2');
     checkSinglePfeilProximity(pfeil3, 'pfeil3');
+    checkSinglePfeilProximity(pfeil4, 'pfeil4');
 }
 
 // Check the proximity between the dragon and a single pfeil
@@ -85,6 +88,8 @@ function moveLeft() {
             pfeil1.x += backgroundSpeed;
             pfeil2.x += backgroundSpeed;
             pfeil3.x += backgroundSpeed;
+            pfeil4.x += backgroundSpeed;
+            tisch.x += backgroundSpeed;
         } else {
             backgroundAtEdge = true;
         }
@@ -104,6 +109,8 @@ function moveRight() {
             pfeil1.x -= backgroundSpeed;
             pfeil2.x -= backgroundSpeed;
             pfeil3.x -= backgroundSpeed;
+            pfeil4.x -= backgroundSpeed;
+            tisch.x -= backgroundSpeed;
         } else {
             backgroundAtEdge = true;
         }
