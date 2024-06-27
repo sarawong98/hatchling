@@ -12,6 +12,7 @@
      }
 
     preload() {
+        this.load.svg('memoryBackground', 'Komponenten/memoryBackground.svg');
         this.load.svg('cardBack', 'Komponenten/cards/cardBack.svg');
         this.load.svg('card1', 'Komponenten/cards/cardBonbon.svg');
         this.load.svg('card2', 'Komponenten/cards/cardBurger.svg');
@@ -28,6 +29,7 @@
     }
 
      create() {
+         this.add.image(this.backgroundX, 0, 'memoryBackground').setOrigin(0);
          // Kartenpositionen (6x4 Grid für 24 Karten)
          const positions = [
              { x: 100, y: 100 }, { x: 200, y: 100 }, { x: 300, y: 100 }, { x: 400, y: 100 }, { x: 500, y: 100 }, { x: 600, y: 100 },
@@ -93,18 +95,23 @@
 
                  // Überprüfen, ob das Spiel vorbei ist
                  if (this.lives <= 0) {
-                     this.gameOver();
+                     this.memoryGameOver();
                  }
              }, [], this);
          }
      }
 
-     gameOver() {
+     memoryGameOver() {
          this.add.text(400, 300, 'Game Over', { fontSize: '64px', fill: '#ff0000' }).setOrigin(0.5);
          this.cards.getChildren().forEach(card => {
              card.disableInteractive();
          });
      }
+
+     returnToMainScene() {
+         this.scene.start('MainScene');
+     }
+
 
     update() {
         // Spielupdate-Logik, falls erforderlich
