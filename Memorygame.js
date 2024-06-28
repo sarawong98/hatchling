@@ -165,12 +165,16 @@ export default class Memorygame extends Phaser.Scene {
 
     memoryVictory() {
         this.add.text(this.cameras.main.width / 2, this.cameras.main.height / 2, 'Victory', { fontSize: '64px', fontFamily: 'Arial', fontWeight: 'bold', fill: '#ffffff' }).setOrigin(0.5);
+        if (!freigeschaltet){
+            this.add.text(this.cameras.main.width / 2, this.cameras.main.height / 2 + 100, 'Du hast eine Blumenvase freigeschaltet', { fontSize: '64px', fontFamily: 'Arial', fontWeight: 'bold', fill: '#ffffff' }).setOrigin(0.5);
+        }
         this.cards.getChildren().forEach(card => {
             card.disableInteractive();
         });
         this.time.delayedCall(3000, () => {
             this.lives = 10;
             this.totalFlippedCards = 0;
+            freigeschaltet = true;
             this.scene.start('MainScene');
         });
     }

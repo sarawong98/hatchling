@@ -11,6 +11,7 @@ export default class MainScene extends Phaser.Scene {
         this.load.svg('drache_mitte', 'Komponenten/Drache_rechts_mitte.svg');
         this.load.svg('drache_unten', 'Komponenten/Drache_rechts_unten.svg');
         this.load.svg('tisch', 'Komponenten/tisch.svg');
+        this.load.image('blumenvase', 'Komponenten/blumenvase.png');
     }
 
     create() {
@@ -42,6 +43,10 @@ export default class MainScene extends Phaser.Scene {
 
         // Tisch
         tisch = this.add.image(2510, 789, 'tisch').setOrigin(0).setScale(1.7, 1.7).setVisible(true);
+
+        //Blumenvase
+        blumenvase = this.add.image(2860, 595, 'blumenvase').setOrigin(0).setScale(0.07, 0.07).setVisible(false);
+
 
         cursors = this.input.keyboard.createCursorKeys();
 
@@ -77,6 +82,7 @@ export default class MainScene extends Phaser.Scene {
         updatePfeilPositions();
         checkPfeilProximity();
         handleInput();
+        checkBlumenvase();
     }
 
     // Flügelanimation des Drachen

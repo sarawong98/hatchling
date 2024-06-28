@@ -13,10 +13,12 @@ let cursors;
 let backgroundAtEdge = false;
 let pfeil1, pfeil2, pfeil3, pfeil4, pfeil5, pfeil6;
 let tisch;
+let blumenvase;
 let selectedObject = null;
 let stars;
 let starSpeed = 200;
 let score = 0;
+let freigeschaltet = false;
 
 const xDistanceThreshold = 200; // Distanzschwelle für die Auswahl der Pfeile nach x-Koordinate
 
@@ -66,6 +68,14 @@ function checkSinglePfeilProximity(pfeil, pfeilName) {
     }
 }
 
+function checkBlumenvase() {
+    if (freigeschaltet) {
+        blumenvase.setVisible(true);
+    } else {
+        blumenvase.setVisible(false);
+    }
+}
+
 // Handle user input for movement and background scrolling
 function handleInput() {
     if (cursors.left.isDown) {
@@ -96,6 +106,7 @@ function moveLeft() {
             pfeil5.x += backgroundSpeed;
             pfeil6.x += backgroundSpeed;
             tisch.x += backgroundSpeed;
+            blumenvase.x += backgroundSpeed;
         } else {
             backgroundAtEdge = true;
         }
@@ -119,6 +130,7 @@ function moveRight() {
             pfeil5.x -= backgroundSpeed;
             pfeil6.x -= backgroundSpeed;
             tisch.x -= backgroundSpeed;
+            blumenvase.x -= backgroundSpeed;
         } else {
             backgroundAtEdge = true;
         }
