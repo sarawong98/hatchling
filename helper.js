@@ -11,7 +11,7 @@ let backgroundSpeed = 6;
 let scene;
 let cursors;
 let backgroundAtEdge = false;
-let pfeil1, pfeil2, pfeil3, pfeil4;
+let pfeil1, pfeil2, pfeil3, pfeil4, pfeil5, pfeil6;
 let tisch;
 let selectedObject = null;
 let stars;
@@ -32,9 +32,11 @@ function updateDragonPosition() {
 function updatePfeilPositions() {
     const bobSpeed = 0.07;
     pfeil1.y = 450 + Math.sin(frameDelay * bobSpeed) * 10;
-    pfeil2.y = 450 + Math.sin((frameDelay + 20) * bobSpeed) * 10; // Slightly offset for variation
-    pfeil3.y = 350 + Math.sin((frameDelay + 40) * bobSpeed) * 10; // Slightly offset for variation
-    pfeil4.y = 550 + Math.sin((frameDelay + 60) * bobSpeed) * 10; // Slightly offset for variation
+    pfeil2.y = 450 + Math.sin((frameDelay + 10) * bobSpeed) * 10; // Slightly offset for variation
+    pfeil3.y = 350 + Math.sin((frameDelay + 20) * bobSpeed) * 10; // Slightly offset for variation
+    pfeil4.y = 550 + Math.sin((frameDelay + 30) * bobSpeed) * 10; // Slightly offset for variation
+    pfeil5.y = 550 + Math.sin((frameDelay + 40) * bobSpeed) * 10; // Slightly offset for variation
+    pfeil6.y = 550 + Math.sin((frameDelay + 50) * bobSpeed) * 10; // Slightly offset for variation
 }
 
 // Check the proximity between the dragon and each pfeil
@@ -43,6 +45,8 @@ function checkPfeilProximity() {
     checkSinglePfeilProximity(pfeil2, 'pfeil2');
     checkSinglePfeilProximity(pfeil3, 'pfeil3');
     checkSinglePfeilProximity(pfeil4, 'pfeil4');
+    checkSinglePfeilProximity(pfeil5, 'pfeil5');
+    checkSinglePfeilProximity(pfeil6, 'pfeil6');
 }
 
 // Check the proximity between the dragon and a single pfeil
@@ -89,6 +93,8 @@ function moveLeft() {
             pfeil2.x += backgroundSpeed;
             pfeil3.x += backgroundSpeed;
             pfeil4.x += backgroundSpeed;
+            pfeil5.x += backgroundSpeed;
+            pfeil6.x += backgroundSpeed;
             tisch.x += backgroundSpeed;
         } else {
             backgroundAtEdge = true;
@@ -110,6 +116,8 @@ function moveRight() {
             pfeil2.x -= backgroundSpeed;
             pfeil3.x -= backgroundSpeed;
             pfeil4.x -= backgroundSpeed;
+            pfeil5.x -= backgroundSpeed;
+            pfeil6.x -= backgroundSpeed;
             tisch.x -= backgroundSpeed;
         } else {
             backgroundAtEdge = true;

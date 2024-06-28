@@ -97,7 +97,7 @@ export default class Memorygame extends Phaser.Scene {
         }
 
         // Anzeige für die Leben
-        this.livesText = this.add.text(10, 10, `Lives: ${this.lives}`, { fontSize: '32px', fill: '#fff' });
+        this.livesText = this.add.text(10, 10, 'Lives: ' + this.lives, { fontSize: '32px', fill: '#fff' });
     }
 
     flipCard(card) {

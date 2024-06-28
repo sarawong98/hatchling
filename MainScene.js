@@ -22,6 +22,9 @@ export default class MainScene extends Phaser.Scene {
         pfeil2 = this.add.image(1250, 450, 'pfeil').setOrigin(0).setScale(0.4, 0.4).setVisible(false);
         pfeil3 = this.add.image(3220, 350, 'pfeil').setOrigin(0).setScale(0.4, 0.4).setVisible(false);
         pfeil4 = this.add.image(2800, 550, 'pfeil').setOrigin(0).setScale(0.4, 0.4).setVisible(false);
+        pfeil5 = this.add.image(4005, 550, 'pfeil').setOrigin(0).setScale(0.4, 0.4).setVisible(false);
+        pfeil6 = this.add.image(2200, 550, 'pfeil').setOrigin(0).setScale(0.4, 0.4).setVisible(false);
+
 
 
         // Drachenanimationen
@@ -60,6 +63,10 @@ export default class MainScene extends Phaser.Scene {
                 this.scene.start('Flyinggame');
             } else if (selectedObject === 'pfeil4') {
                 this.scene.start('Memorygame');
+            } else if (selectedObject === 'pfeil5') {
+                this.scene.start('Eatinggame');
+            } else if (selectedObject === 'pfeil6') {
+                this.scene.start('Shopgame');
             }
         });
     }
