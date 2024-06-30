@@ -100,6 +100,7 @@ export default class Eatinggame extends Phaser.Scene {
             this.round = 1;
             this.treffer = 0;
             this.time.delayedCall(2000, () => {
+                backgroundAtEdge = false;
                 this.backgroundMusic.stop();
                 this.scene.start('MainScene');
             });
