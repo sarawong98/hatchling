@@ -1,4 +1,5 @@
 // Globale Variablen
+let backgroundMusic;
 let dragon;
 let dragonFrames = [];
 let frameIndex = 0;

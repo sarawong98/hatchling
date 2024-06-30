@@ -10,10 +10,15 @@ export default class MainScene extends Phaser.Scene {
         this.load.svg('drache_mitte2', 'Komponenten/Drache_rechts_mitte2.svg');
         this.load.svg('drache_mitte', 'Komponenten/Drache_rechts_mitte.svg');
         this.load.svg('drache_unten', 'Komponenten/Drache_rechts_unten.svg');
+        this.load.audio('backgroundMusic', 'audio/cozy-homey-relaxing-music.mp3');
     }
 
     create() {
         scene = this;
+
+        // Create and play the background music
+        this.backgroundMusic = this.sound.add('backgroundMusic', { volume: 1, loop: true });
+        this.backgroundMusic.play();
 
         // Hintergrund und Pfeile
         background = this.add.image(0, 0, 'raum').setOrigin(0);
@@ -50,6 +55,7 @@ export default class MainScene extends Phaser.Scene {
             } else if (selectedObject === 'pfeil2') {
                 this.scene.start('Sleepinggame', { backgroundX: background.x, pfeilX: pfeil2.x });
             } else if (selectedObject === 'pfeil3') {
+                this.backgroundMusic.stop();
                 this.scene.start('Flyinggame');
             }
         });

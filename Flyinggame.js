@@ -12,6 +12,7 @@ export default class Flyinggame extends Phaser.Scene {
         this.player = null;
         this.ringsBack = null;
         this.ringsFront = null;
+        this.backgroundMusic = null;
     }
 
     preload() {
@@ -22,10 +23,15 @@ export default class Flyinggame extends Phaser.Scene {
         this.load.image('sky', 'Komponenten/sky.png');
         this.load.svg('ring_back', 'Komponenten/Reifen_hinten.svg');
         this.load.svg('ring_front', 'Komponenten/Reifen_vorne.svg');
+        this.load.audio('gameMusic', 'audio/little-slimes-adventure.mp3');
     }
 
     create() {
         this.score = 0;
+
+        // Create and play the background music
+        this.backgroundMusic = this.sound.add('gameMusic', { volume: 1, loop: true });
+        this.backgroundMusic.play();
 
         var image = this.add.image(this.cameras.main.width / 2, this.cameras.main.height / 2, 'sky');
         var scaleX = this.cameras.main.width / image.width;
@@ -79,6 +85,7 @@ export default class Flyinggame extends Phaser.Scene {
 
     update() {
         if (this.gameover) {
+            this.backgroundMusic.stop();
             this.scene.start('Gameover', {finalScore: this.score});
         }
 
