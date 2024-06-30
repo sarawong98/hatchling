@@ -1,6 +1,7 @@
 export default class Showergame extends Phaser.Scene {
     constructor() {
-        super({ key: 'Showergame' });
+        super({key: 'Showergame'});
+        this.sounds = null;
     }
 
     init(data) {
@@ -12,9 +13,12 @@ export default class Showergame extends Phaser.Scene {
         this.load.svg('seifenblase', 'Komponenten/seifenblase.svg'); // Seifenblasen laden
         this.load.svg('Drache_baden', 'Komponenten/Drache_baden.svg');
         this.load.svg('raum', 'Komponenten/raum.svg');
+        this.load.audio('bubblePopSound', 'audio/bubble-pop.mp3');
     }
 
-    create() {
+    create(data) {
+        this.sounds = this.sound.add('bubblePopSound', {volume: 1, loop: false});
+
         this.add.image(this.backgroundX, 0, 'raum').setOrigin(0);
         this.drache = this.add.image(230, 470, 'Drache_baden').setOrigin(0);
         this.badewanne = this.add.image(0, 0, 'badewanne').setOrigin(0);
@@ -35,6 +39,12 @@ export default class Showergame extends Phaser.Scene {
 
         // Array für aktuelle Seifenblasen
         this.seifenblasen = [];
+
+        // Münzanzeige
+        if (data && data.totalCoins) {
+            console.log(data.totalCoins);
+            this.add.text(16, 16, 'Coins: ' + data.totalCoins, {fontSize: '32px', fontWeight: 'bold', fill: '#000'});
+        }
     }
 
     update() {
@@ -79,9 +89,12 @@ export default class Showergame extends Phaser.Scene {
         // Klick-Interaktion: Wenn die Seifenblase angeklickt wird, verschwindet sie
         seifenblase.setInteractive();
         seifenblase.on('pointerdown', () => {
-            // Seifenblase aus dem Array entfernen und zerstören
-            this.seifenblasen = this.seifenblasen.filter(bubble => bubble !== seifenblase);
-            seifenblase.destroy();
+            this.sounds.play();
+            this.time.delayedCall(300, () => {
+                // Seifenblase aus dem Array entfernen und zerstören
+                this.seifenblasen = this.seifenblasen.filter(bubble => bubble !== seifenblase);
+                seifenblase.destroy();
+            });
         });
 
         // Seifenblase zum Array hinzufügen
@@ -93,7 +106,7 @@ export default class Showergame extends Phaser.Scene {
 
     // Zurück zur Hauptszene wechseln
     returnToMainScene() {
-        this.scene.start('MainScene');
+        this.scene.stop('Showergame');
     }
 
     // Aufräumen bei Beendigung der Szene

@@ -11,6 +11,7 @@ export default class Memorygame extends Phaser.Scene {
         this.livesText = null;
         this.totalFlippedCards = 0;
         this.anzahlPaare = 0;
+        this.cardSound = null;
     }
 
     preload() {
@@ -28,9 +29,16 @@ export default class Memorygame extends Phaser.Scene {
         this.load.svg('card10', 'Komponenten/cards/cardMuffin.svg');
         this.load.svg('card11', 'Komponenten/cards/cardPizza.svg');
         this.load.svg('card12', 'Komponenten/cards/cardPommes.svg');
+        this.load.audio('gameMusic', 'audio/little-slimes-adventure.mp3');
+        this.load.audio('cardSound', 'audio/card-sound.mp3');
     }
 
     create() {
+        // Create and play the background music
+        this.backgroundMusic = this.sound.add('gameMusic', { volume: 1, loop: true });
+        this.backgroundMusic.play();
+        this.cardSound = this.sound.add('cardSound', { volume: 1, loop: false });
+
         this.add.image(0, 0, 'memoryBackground').setScale(50, 50).setOrigin(0);
 
         const centerX = this.cameras.main.width / 2;
@@ -102,6 +110,7 @@ export default class Memorygame extends Phaser.Scene {
 
     flipCard(card) {
         if (this.flippedCards < 2 && card.texture.key === 'cardBack') {
+            this.cardSound.play();
             card.setTexture(card.cardId);
             this.flippedCards++;
             if (this.flippedCards === 1) {
@@ -159,14 +168,20 @@ export default class Memorygame extends Phaser.Scene {
         this.time.delayedCall(3000, () => {
             this.lives = 10;
             this.totalFlippedCards = 0;
+            this.backgroundMusic.stop();
             this.scene.start('MainScene');
         });
     }
 
     memoryVictory() {
+        var collectedCoins = 0;
+
         this.add.text(this.cameras.main.width / 2, this.cameras.main.height / 2, 'Victory', { fontSize: '64px', fontFamily: 'Arial', fontWeight: 'bold', fill: '#ffffff' }).setOrigin(0.5);
         if (!freigeschaltet){
             this.add.text(this.cameras.main.width / 2, this.cameras.main.height / 2 + 100, 'Du hast eine Blumenvase freigeschaltet', { fontSize: '64px', fontFamily: 'Arial', fontWeight: 'bold', fill: '#ffffff' }).setOrigin(0.5);
+        } else {
+            collectedCoins += 5;
+            this.add.text(this.cameras.main.width / 2, this.cameras.main.height / 2 + 100, 'Gesammelte Münzen: 5', { fontSize: '64px', fontFamily: 'Arial', fontWeight: 'bold', fill: '#ffffff' }).setOrigin(0.5);
         }
         this.cards.getChildren().forEach(card => {
             card.disableInteractive();
@@ -175,7 +190,8 @@ export default class Memorygame extends Phaser.Scene {
             this.lives = 10;
             this.totalFlippedCards = 0;
             freigeschaltet = true;
-            this.scene.start('MainScene');
+            this.backgroundMusic.stop();
+            this.scene.start('MainScene', {collectedCoins: collectedCoins});
         });
     }
 }

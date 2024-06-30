@@ -69,30 +69,28 @@ export default class MainScene extends Phaser.Scene {
         });
 
         // Münzanzeige
-        this.coinText = this.add.text(16, 16, 'Coins: ' + this.totalCoins, { fontSize: '32px', fontWeight: 'bold', fill: '#000' });
+        this.add.text(16, 16, 'Coins: ' + this.totalCoins, { fontSize: '32px', fontWeight: 'bold', fill: '#000' });
 
         // Starten der Minispiele durch Leertaste
         this.input.keyboard.on('keydown-SPACE', () => {
             if (selectedObject === 'pfeil1') {
-                this.scene.start('Showergame', { backgroundX: background.x });
+                this.scene.launch('Showergame', { backgroundX: background.x, totalCoins: this.totalCoins});
             } else if (selectedObject === 'pfeil2') {
-                this.scene.start('Sleepinggame', { backgroundX: background.x, pfeilX: pfeil2.x });
+                this.backgroundMusic.stop();
+                this.scene.start('Sleepinggame', { backgroundX: background.x, pfeilX: pfeil2.x , totalCoins: this.totalCoins});
             } else if (selectedObject === 'pfeil3') {
                 this.backgroundMusic.stop();
                 this.scene.start('Flyinggame');
             } else if (selectedObject === 'pfeil4') {
+                this.backgroundMusic.stop();
                 this.scene.start('Memorygame');
             } else if (selectedObject === 'pfeil5') {
+                this.backgroundMusic.stop();
                 this.scene.start('Eatinggame');
             } else if (selectedObject === 'pfeil6') {
-                this.scene.start('Shopgame');
+                this.scene.launch('Shopgame');
             }
         });
-    }
-
-    updateCoins(coins) {
-        this.totalCoins += coins;
-        this.coinText.setText('Coins: ' + this.totalCoins);
     }
 
     update() {

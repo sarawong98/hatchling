@@ -7,10 +7,10 @@ export default class Eatinggame extends Phaser.Scene {
         this.round = 1;
         this.totalrounds = 5;
         this.treffer = 0;
+        this.backgroundMusic = null;
     }
 
     preload() {
-        // Lade Ressourcen, falls notwendig (Bilder, Sounds, etc.)
         this.load.svg('memoryBackground', 'Komponenten/memoryBackground.svg');
         this.load.image('eatHintergrundOfenNapf', 'Komponenten/eating/eatHintergrundOfenNapf.png');
         this.load.image('roheKeule', 'Komponenten/eating/roheKeule.png');
@@ -20,10 +20,13 @@ export default class Eatinggame extends Phaser.Scene {
             this.load.image('napf' + i, 'Komponenten/eating/napf' + i + '.png');
         }
         this.load.image('sliderBar', 'Komponenten/eating/sliderBar.png');
+        this.load.audio('gameMusic', 'audio/little-slimes-adventure.mp3');
     }
 
     create() {
-        // Hinzufügen von Hintergrund und anderen Elementen
+        this.backgroundMusic = this.sound.add('gameMusic', { volume: 1, loop: true });
+        this.backgroundMusic.play();
+
         this.add.image(0, 0, 'memoryBackground').setScale(50, 50).setOrigin(0);
         const hintergrund = this.add.image(this.cameras.main.width / 2, this.cameras.main.height / 2, 'eatHintergrundOfenNapf');
         hintergrund.setScale(0.4, 0.4);
@@ -34,7 +37,6 @@ export default class Eatinggame extends Phaser.Scene {
         this.napf = this.add.image(this.cameras.main.width / 2, this.cameras.main.height / 2, 'napf0');
         this.napf.setScale(0.4, 0.4);
         this.napf.setOrigin(0.5, 0.5);
-
 
         // Variablen für das Spiel
         this.sliderBar = this.add.image(400, 300, 'sliderBar').setScale(0.5, 0.4);
@@ -91,6 +93,7 @@ export default class Eatinggame extends Phaser.Scene {
                     this.add.text(this.cameras.main.width / 2, 300, 'Der Drache ist satt geworden :)', { fontSize: '32px', fill: '#ffffff' }).setOrigin(0.5);
                 }
                 this.time.delayedCall(2000, () => {
+                    this.backgroundMusic.stop();
                     this.scene.start('MainScene');
                 }, [], this);
                 this.round = 1;

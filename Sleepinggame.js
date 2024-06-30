@@ -14,9 +14,13 @@ export default class Sleepinggame extends Phaser.Scene {
         this.load.svg('drache_schlafen', 'Komponenten/drache_schlafen.svg'); // Drache schläft SVG
         this.load.svg('zzz', 'Komponenten/zzz.svg'); // Zzz SVG
         this.load.svg('raum', 'Komponenten/raum.svg');
+        this.load.audio('sleepingMusic', 'audio/sleeping-music.mp3');
     }
 
-    create() {
+    create(data) {
+        this.backgroundMusic = this.sound.add('sleepingMusic', { volume: 1, loop: true });
+        this.backgroundMusic.play();
+
         this.add.image(this.backgroundX, 0, 'raum').setOrigin(0);
         this.add.image(this.backgroundX, 0, 'bett').setOrigin(0);
 
@@ -32,6 +36,12 @@ export default class Sleepinggame extends Phaser.Scene {
         // Tag-Nacht-Wechsel-Effekt
         this.nightOverlay = this.add.rectangle(0, 0, window.innerWidth, window.innerHeight, 0x000000).setOrigin(0).setAlpha(0);
         this.isNight = false; // Flag, um den Zustand der Dunkelheit zu verfolgen
+
+        // Münzanzeige
+        if (data && data.totalCoins) {
+            console.log(data.totalCoins);
+            this.add.text(16, 16, 'Coins: ' + data.totalCoins, { fontSize: '32px', fontWeight: 'bold', fill: '#000' });
+        }
     }
 
     toggleLight() {
@@ -50,7 +60,7 @@ export default class Sleepinggame extends Phaser.Scene {
                 alpha: 0,
                 duration: 2000,
                 onComplete: () => {
-                    // Wechsel zurück zur Hauptszene nach der Transition
+                    this.backgroundMusic.stop();
                     this.scene.start('MainScene');
                 }
             });
