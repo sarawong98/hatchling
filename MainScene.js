@@ -1,6 +1,7 @@
 export default class MainScene extends Phaser.Scene {
     constructor() {
         super({ key: 'MainScene' });
+        this.totalCoins = 0;
     }
 
     preload() {
@@ -13,8 +14,12 @@ export default class MainScene extends Phaser.Scene {
         this.load.audio('backgroundMusic', 'audio/cozy-homey-relaxing-music.mp3');
     }
 
-    create() {
+    create(data) {
         scene = this;
+
+        if (data && data.collectedCoins) {
+            this.totalCoins += data.collectedCoins;
+        }
 
         // Create and play the background music
         this.backgroundMusic = this.sound.add('backgroundMusic', { volume: 1, loop: true });
@@ -48,6 +53,9 @@ export default class MainScene extends Phaser.Scene {
             loop: true
         });
 
+        // Münzanzeige
+        this.coinText = this.add.text(16, 16, 'Coins: ' + this.totalCoins, { fontSize: '32px', fontWeight: 'bold', fill: '#000' });
+
         // Starten der Minispiele durch Leertaste
         this.input.keyboard.on('keydown-SPACE', () => {
             if (selectedObject === 'pfeil1') {
@@ -59,6 +67,11 @@ export default class MainScene extends Phaser.Scene {
                 this.scene.start('Flyinggame');
             }
         });
+    }
+
+    updateCoins(coins) {
+        this.totalCoins += coins;
+        this.coinText.setText('Coins: ' + this.totalCoins);
     }
 
     update() {
