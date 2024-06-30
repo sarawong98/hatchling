@@ -4,7 +4,9 @@ import Showergame from "./Showergame.js";
 import Sleepinggame from "./Sleepinggame.js";
 import Flyinggame from "./Flyinggame.js";
 import Gameover from "./Gameover.js";
-
+import Memorygame from "./Memorygame.js";
+import Eatinggame from "./Eatinggame.js";
+import Shopgame from "./Shopgame.js";
 
 const config = {
     type: Phaser.AUTO,
@@ -13,7 +15,7 @@ const config = {
     backgroundColor: '#87CEEB',
     parent: 'game-container',
     pixelArt: true,
-    scene: [MainScene, Showergame, Sleepinggame, Flyinggame, Gameover],
+    scene: [MainScene, Showergame, Sleepinggame, Flyinggame, Gameover, Memorygame, Eatinggame, Shopgame],
     physics: {
         default: 'arcade',
         arcade: {

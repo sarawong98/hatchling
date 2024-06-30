@@ -11,6 +11,8 @@ export default class MainScene extends Phaser.Scene {
         this.load.svg('drache_mitte2', 'Komponenten/Drache_rechts_mitte2.svg');
         this.load.svg('drache_mitte', 'Komponenten/Drache_rechts_mitte.svg');
         this.load.svg('drache_unten', 'Komponenten/Drache_rechts_unten.svg');
+        this.load.svg('tisch', 'Komponenten/tisch.svg');
+        this.load.image('blumenvase', 'Komponenten/blumenvase.png');
         this.load.audio('backgroundMusic', 'audio/cozy-homey-relaxing-music.mp3');
     }
 
@@ -30,6 +32,11 @@ export default class MainScene extends Phaser.Scene {
         pfeil1 = this.add.image(250, 450, 'pfeil').setOrigin(0).setScale(0.4, 0.4).setVisible(false);
         pfeil2 = this.add.image(1250, 450, 'pfeil').setOrigin(0).setScale(0.4, 0.4).setVisible(false);
         pfeil3 = this.add.image(3220, 350, 'pfeil').setOrigin(0).setScale(0.4, 0.4).setVisible(false);
+        pfeil4 = this.add.image(2800, 550, 'pfeil').setOrigin(0).setScale(0.4, 0.4).setVisible(false);
+        pfeil5 = this.add.image(4005, 550, 'pfeil').setOrigin(0).setScale(0.4, 0.4).setVisible(false);
+        pfeil6 = this.add.image(2200, 550, 'pfeil').setOrigin(0).setScale(0.4, 0.4).setVisible(false);
+
+
 
         // Drachenanimationen
         dragonFrames = [
@@ -42,6 +49,14 @@ export default class MainScene extends Phaser.Scene {
         ];
         dragon = dragonFrames[0];
         dragon.setVisible(true);
+
+
+        // Tisch
+        tisch = this.add.image(2510, 789, 'tisch').setOrigin(0).setScale(1.7, 1.7).setVisible(true);
+
+        //Blumenvase
+        blumenvase = this.add.image(2860, 595, 'blumenvase').setOrigin(0).setScale(0.07, 0.07).setVisible(false);
+
 
         cursors = this.input.keyboard.createCursorKeys();
 
@@ -65,6 +80,12 @@ export default class MainScene extends Phaser.Scene {
             } else if (selectedObject === 'pfeil3') {
                 this.backgroundMusic.stop();
                 this.scene.start('Flyinggame');
+            } else if (selectedObject === 'pfeil4') {
+                this.scene.start('Memorygame');
+            } else if (selectedObject === 'pfeil5') {
+                this.scene.start('Eatinggame');
+            } else if (selectedObject === 'pfeil6') {
+                this.scene.start('Shopgame');
             }
         });
     }
@@ -80,6 +101,7 @@ export default class MainScene extends Phaser.Scene {
         updatePfeilPositions();
         checkPfeilProximity();
         handleInput();
+        checkBlumenvase();
     }
 
     // Flügelanimation des Drachen
