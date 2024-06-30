@@ -2,7 +2,7 @@ export default class Flyinggame extends Phaser.Scene {
     constructor() {
         super({key: 'Flyinggame'});
 
-        // Variablen als Instanzvariablen der Klasse deklarieren
+        // Variables as instance variables of the class
         this.score = 0;
         this.scoreText = null;
         this.dragonFrames = [];
@@ -10,8 +10,8 @@ export default class Flyinggame extends Phaser.Scene {
         this.ringSpeed = 100;
         this.gameover = false;
         this.player = null;
-        this.rings = null;
-        this.previousRingBack = null;
+        this.ringsBack = null;
+        this.ringsFront = null;
     }
 
     preload() {
@@ -43,14 +43,10 @@ export default class Flyinggame extends Phaser.Scene {
         ];
         this.dragon = this.dragonFrames[0];
         this.dragon.setVisible(true);
-        this.player = this.physics.add.sprite(this.dragon);
+        this.player = this.physics.add.sprite(400, 500, null).setVisible(false); // Hidden sprite to handle physics
 
-        console.log('Drache: ' + JSON.stringify(this.dragon));
-        console.log('Spieler: ' + this.player);
-
-        // Kollisionsbox des Drachen verkleinern
-        this.player.body.setSize(this.dragon.width * 0.5, this.dragon.height * 0.5); // Kollisionsbox auf 50% der Originalgröße setzen
-        this.player.body.setOffset(this.dragon.width * 0.25, this.dragon.height * 0.25); // Offset anpassen, falls notwendig
+        // Set collision box to a minimum für 3D-Effect
+        this.player.body.setSize(this.dragon.width * 0.01, this.dragon.height * 0.01);
 
         // Input Events
         this.cursors = this.input.keyboard.createCursorKeys();
@@ -58,23 +54,27 @@ export default class Flyinggame extends Phaser.Scene {
         // The score
         this.scoreText = this.add.text(16, 16, 'Score: 0', {fontSize: '32px', fill: '#000'});
 
-        // Animation der Flügel
+        // Animation of the wings
         this.time.addEvent({
-            delay: 250, // alle 250 ms wechseln
+            delay: 250, // switch every 250 ms
             callback: this.animateWings,
             callbackScope: this,
             loop: true
         });
 
-        // Generieren der Sterne
-        this.rings = this.physics.add.group();
+        // Generate the rings
+        this.ringsBack = this.physics.add.group();
+        this.ringsFront = this.physics.add.group();
 
         this.time.addEvent({
-            delay: 3000, // Generationszeit in ms
+            delay: 2500, // generation time in ms
             callback: this.spawnRing,
             callbackScope: this,
             loop: true
         });
+
+        // Add collision detection between the player and rings
+        this.physics.add.overlap(this.player, this.ringsFront, this.collectRing, null, this);
     }
 
     update() {
@@ -86,7 +86,7 @@ export default class Flyinggame extends Phaser.Scene {
 
         const moveSpeed = 5;
 
-        // Bewegen des Drachen mit Pfeiltasten
+        // Move the dragon with arrow keys
         if (this.cursors.up.isDown) {
             this.dragon.y -= moveSpeed;
             this.dragonFrames.forEach(frame => frame.y = this.dragon.y);
@@ -95,29 +95,15 @@ export default class Flyinggame extends Phaser.Scene {
             this.dragonFrames.forEach(frame => frame.y = this.dragon.y);
         }
 
-        this.rings.children.iterate(function (ring) {
-            if (ring.texture.key === "ring_back") {
-                this.previousRingBack = ring;
-            }
-            if (ring.texture.key === "ring_front" && this.checkOverlap(ring)) {
-                console.log('overlapping');
-                ring.disableBody(true, true);
-                this.previousRingBack.disableBody(true, true);
+        // Sync hidden player's position with the visible dragon
+        this.player.y = this.dragon.y;
 
-                // Score aktualisieren
-                this.score += 1;
-                this.scoreText.setText('Score: ' + this.score);
-            }
+        // Check if any ring goes off screen
+        this.ringsFront.children.iterate((ring) => {
             if (ring.x < 5) {
                 this.gameover = true;
             }
-        }, this);
-    }
-
-    checkOverlap(ring) {
-        var ringPassTolerance = 30;
-        // Annahme, dass x und y immer zentral liegen
-        return this.dragon.x >= (ring.x - 1) && this.dragon.x <= (ring.x + 1) && this.dragon.y >= (ring.y - ringPassTolerance) && this.dragon.y <= (ring.y + ringPassTolerance);
+        });
     }
 
     animateWings() {
@@ -129,9 +115,23 @@ export default class Flyinggame extends Phaser.Scene {
 
     spawnRing() {
         const y = Phaser.Math.Between(50, this.cameras.main.height - 50);
-        const ringBack = this.rings.create(this.cameras.main.width - 40, y, 'ring_back').setDepth(0);
+        const ringBack = this.ringsBack.create(this.cameras.main.width - 40, y, 'ring_back').setDepth(0);
         ringBack.setVelocityX(-this.ringSpeed);
-        const ringFront = this.rings.create(this.cameras.main.width - 20, y, 'ring_front').setDepth(1);
+        const ringFront = this.ringsFront.create(this.cameras.main.width - 20, y, 'ring_front').setDepth(1);
         ringFront.setVelocityX(-this.ringSpeed);
+    }
+
+    collectRing(player, ringFront) {
+        ringFront.disableBody(true, true);
+
+        // Disable the corresponding ring back
+        const ringBack = this.ringsBack.getChildren().find(ring => ring.y === ringFront.y);
+        if (ringBack) {
+            ringBack.disableBody(true, true);
+        }
+
+        // Score update
+        this.score += 1;
+        this.scoreText.setText('Score: ' + this.score);
     }
 }
