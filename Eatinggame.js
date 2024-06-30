@@ -1,6 +1,6 @@
 export default class Eatinggame extends Phaser.Scene {
     constructor() {
-        super({ key: 'Eatinggame' });
+        super({key: 'Eatinggame'});
 
         this.keule = null;
         this.napf = null;
@@ -24,7 +24,7 @@ export default class Eatinggame extends Phaser.Scene {
     }
 
     create() {
-        this.backgroundMusic = this.sound.add('gameMusic', { volume: 1, loop: true });
+        this.backgroundMusic = this.sound.add('gameMusic', {volume: 1, loop: true});
         this.backgroundMusic.play();
 
         this.add.image(0, 0, 'memoryBackground').setScale(50, 50).setOrigin(0);
@@ -84,21 +84,25 @@ export default class Eatinggame extends Phaser.Scene {
         this.slider.active = false;
 
         // Prüfen, ob die Runden vorbei sind
-        if (this.round == this.totalrounds) {
-            this.time.delayedCall(1500, () => {
-                this.keule.setVisible(false);
-                if (this.treffer < 3) {
-                    this.add.text(this.cameras.main.width / 2, 300, 'Der Drache ist nicht satt geworden :(', { fontSize: '32px', fill: '#ffffff' }).setOrigin(0.5);
-                } else {
-                    this.add.text(this.cameras.main.width / 2, 300, 'Der Drache ist satt geworden :)', { fontSize: '32px', fill: '#ffffff' }).setOrigin(0.5);
-                }
-                this.time.delayedCall(2000, () => {
-                    this.backgroundMusic.stop();
-                    this.scene.start('MainScene');
-                }, [], this);
-                this.round = 1;
-                this.treffer = 0;
-            }, [], this);
+        if (this.round === this.totalrounds) {
+            this.keule.setVisible(false);
+            if (this.treffer < 3) {
+                this.add.text(this.cameras.main.width / 2, 300, 'Der Drache ist nicht satt geworden :(', {
+                    fontSize: '32px',
+                    fill: '#ffffff'
+                }).setOrigin(0.5);
+            } else {
+                this.add.text(this.cameras.main.width / 2, 300, 'Der Drache ist satt geworden :)', {
+                    fontSize: '32px',
+                    fill: '#ffffff'
+                }).setOrigin(0.5);
+            }
+            this.round = 1;
+            this.treffer = 0;
+            this.time.delayedCall(2000, () => {
+                this.backgroundMusic.stop();
+                this.scene.start('MainScene');
+            });
         } else {
             // Nächste Runde vorbereiten
             this.round++;
@@ -109,7 +113,7 @@ export default class Eatinggame extends Phaser.Scene {
                 this.sliderBar.setVisible(true);
                 this.slider.setVisible(true);
                 this.slider.active = true;
-            }, [], this);
+            });
         }
     }
 }

@@ -36,8 +36,6 @@ export default class MainScene extends Phaser.Scene {
         pfeil5 = this.add.image(4005, 550, 'pfeil').setOrigin(0).setScale(0.4, 0.4).setVisible(false);
         pfeil6 = this.add.image(2200, 550, 'pfeil').setOrigin(0).setScale(0.4, 0.4).setVisible(false);
 
-
-
         // Drachenanimationen
         dragonFrames = [
             this.add.image(dragonX, dragonY, 'drache_oben').setVisible(false),
@@ -50,13 +48,11 @@ export default class MainScene extends Phaser.Scene {
         dragon = dragonFrames[0];
         dragon.setVisible(true);
 
-
         // Tisch
         tisch = this.add.image(2510, 789, 'tisch').setOrigin(0).setScale(1.7, 1.7).setVisible(true);
 
         //Blumenvase
         blumenvase = this.add.image(2860, 595, 'blumenvase').setOrigin(0).setScale(0.07, 0.07).setVisible(false);
-
 
         cursors = this.input.keyboard.createCursorKeys();
 

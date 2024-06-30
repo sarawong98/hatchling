@@ -6,6 +6,7 @@ export default class Showergame extends Phaser.Scene {
 
     init(data) {
         this.backgroundX = data.backgroundX;
+        this.totalCoins = data.totalCoins;
     }
 
     preload() {
@@ -41,10 +42,7 @@ export default class Showergame extends Phaser.Scene {
         this.seifenblasen = [];
 
         // Münzanzeige
-        if (data && data.totalCoins) {
-            console.log(data.totalCoins);
-            this.add.text(16, 16, 'Coins: ' + data.totalCoins, {fontSize: '32px', fontWeight: 'bold', fill: '#000'});
-        }
+        this.add.text(16, 16, 'Coins: ' + this.totalCoins, {fontSize: '32px', fontWeight: 'bold', fill: '#000'});
     }
 
     update() {

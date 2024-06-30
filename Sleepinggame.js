@@ -7,6 +7,7 @@ export default class Sleepinggame extends Phaser.Scene {
     init(data) {
         this.backgroundX = data.backgroundX;
         this.pfeilX = data.pfeilX; // Pfeil x-Position speichern
+        this.totalCoins = data.totalCoins;
     }
 
     preload() {
@@ -38,10 +39,7 @@ export default class Sleepinggame extends Phaser.Scene {
         this.isNight = false; // Flag, um den Zustand der Dunkelheit zu verfolgen
 
         // Münzanzeige
-        if (data && data.totalCoins) {
-            console.log(data.totalCoins);
-            this.add.text(16, 16, 'Coins: ' + data.totalCoins, { fontSize: '32px', fontWeight: 'bold', fill: '#000' });
-        }
+        this.add.text(16, 16, 'Coins: ' + this.totalCoins, {fontSize: '32px', fontWeight: 'bold', fill: '#000'});
     }
 
     toggleLight() {
