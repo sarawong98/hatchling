@@ -13,6 +13,7 @@ let cursors;
 let backgroundAtEdge = false;
 let pfeil1, pfeil2, pfeil3;
 let selectedObject = null;
+let coin;
 
 const xDistanceThreshold = 200; // Distanzschwelle für die Auswahl der Pfeile nach x-Koordinate
 

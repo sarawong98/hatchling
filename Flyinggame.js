@@ -22,6 +22,7 @@ export default class Flyinggame extends Phaser.Scene {
         this.load.image('sky', 'Komponenten/sky.png');
         this.load.svg('ring_back', 'Komponenten/Reifen_hinten.svg');
         this.load.svg('ring_front', 'Komponenten/Reifen_vorne.svg');
+        this.load.spritesheet('coin', 'Komponenten/coin_anim.png', { frameWidth: 32, frameHeight: 32 });
     }
 
     create() {

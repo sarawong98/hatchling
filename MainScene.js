@@ -10,13 +10,14 @@ export default class MainScene extends Phaser.Scene {
         this.load.svg('drache_mitte2', 'Komponenten/Drache_rechts_mitte2.svg');
         this.load.svg('drache_mitte', 'Komponenten/Drache_rechts_mitte.svg');
         this.load.svg('drache_unten', 'Komponenten/Drache_rechts_unten.svg');
+        this.load.spritesheet('coin', 'Komponenten/coin_anim.png', { frameWidth: 32, frameHeight: 32 });
     }
 
     create() {
         scene = this;
 
         // Hintergrund und Pfeile
-        background = this.add.image(0, 0, 'raum').setOrigin(0);
+        background = this.add.image(0, 0, 'raum').setOrigin(0).setDepth(0);
         pfeil1 = this.add.image(250, 450, 'pfeil').setOrigin(0).setScale(0.4, 0.4).setVisible(false);
         pfeil2 = this.add.image(1250, 450, 'pfeil').setOrigin(0).setScale(0.4, 0.4).setVisible(false);
         pfeil3 = this.add.image(3220, 350, 'pfeil').setOrigin(0).setScale(0.4, 0.4).setVisible(false);
@@ -53,6 +54,23 @@ export default class MainScene extends Phaser.Scene {
                 this.scene.start('Flyinggame');
             }
         });
+
+        // Create the coin animation
+        this.anims.create({
+            key: 'rotate',
+            frames: this.anims.generateFrameNumbers('coin', { start: 0, end: 5 }),
+            frameRate: 10,
+            repeat: -1
+        });
+
+        // Add the coin sprite and play the animation
+        coin = this.add.sprite(100, 100, 'coin').setScale(1).setDepth(1).setVisible(true);
+        console.log(coin);
+        coin.play('rotate');
+
+        // Debugging logs
+        console.log('Coin added at position:', coin.x, coin.y);
+        console.log('Coin animation playing:', coin.anims.isPlaying);
     }
 
     update() {
