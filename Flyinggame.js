@@ -53,6 +53,7 @@ export default class Flyinggame extends Phaser.Scene {
 
         // Set collision box to a minimum für 3D-Effect
         this.player.body.setSize(this.dragon.width * 0.01, this.dragon.height * 0.01);
+        this.player.body.setOffset(-50, 0);
 
         // Input Events
         this.cursors = this.input.keyboard.createCursorKeys();

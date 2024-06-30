@@ -65,7 +65,7 @@ export default class MainScene extends Phaser.Scene {
         });
 
         // Münzanzeige
-        this.add.text(16, 16, 'Coins: ' + this.totalCoins, { fontSize: '32px', fontWeight: 'bold', fill: '#000' });
+        this.add.text(16, 32, 'Coins: ' + this.totalCoins, { fontSize: '32px', fontWeight: 'bold', fill: '#000' });
 
         // Starten der Minispiele durch Leertaste
         this.input.keyboard.on('keydown-SPACE', () => {

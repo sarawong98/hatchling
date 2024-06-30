@@ -13,7 +13,7 @@ export default class Gameover extends Phaser.Scene {
 
         this.coins = this.calculateEarnedCoins(data.finalScore);
 
-        this.add.text(this.cameras.main.width / 2, this.cameras.main.height / 1.7 - 64, 'Earned Coins: ' + this.coins, {
+        this.add.text(this.cameras.main.width / 2, this.cameras.main.height / 1.7 - 64, 'Gesammelte Münzen: ' + this.coins, {
             fontSize: '48px',
             fontWeight: 'bold',
             fill: '#ffffff'
