@@ -4,6 +4,12 @@ export default class MainScene extends Phaser.Scene {
         this.totalCoins = 0;
     }
 
+    init() {
+        // Get screen dimensions
+        screenWidth = this.cameras.main.width;
+        screenHeight = this.cameras.main.height;
+    }
+
     preload() {
         this.load.svg('raum', 'Komponenten/raum.svg');
         this.load.svg('pfeil', 'Komponenten/pfeil.svg');
@@ -28,13 +34,17 @@ export default class MainScene extends Phaser.Scene {
         this.backgroundMusic.play();
 
         // Hintergrund und Pfeile
-        background = this.add.image(0, 0, 'raum').setOrigin(0);
-        pfeil1 = this.add.image(250, 450, 'pfeil').setOrigin(0).setScale(0.4, 0.4).setVisible(false);
-        pfeil2 = this.add.image(1250, 450, 'pfeil').setOrigin(0).setScale(0.4, 0.4).setVisible(false);
-        pfeil3 = this.add.image(3220, 350, 'pfeil').setOrigin(0).setScale(0.4, 0.4).setVisible(false);
-        pfeil4 = this.add.image(2800, 550, 'pfeil').setOrigin(0).setScale(0.4, 0.4).setVisible(false);
-        pfeil5 = this.add.image(4005, 550, 'pfeil').setOrigin(0).setScale(0.4, 0.4).setVisible(false);
-        pfeil6 = this.add.image(2200, 550, 'pfeil').setOrigin(0).setScale(0.4, 0.4).setVisible(false);
+        var image = this.add.image(0, 0, 'raum').setOrigin(0);
+        scale = this.cameras.main.height / image.height;
+        background = image.setScale(scale);
+
+        var arrowScale = 0.4  * scale; // Arbitrary scale based on screen height
+        pfeil1 = this.add.image(250 * scale, 450 * scale, 'pfeil').setOrigin(0).setScale(arrowScale).setVisible(false);
+        pfeil2 = this.add.image(1250 * scale, 450 * scale, 'pfeil').setOrigin(0).setScale(arrowScale).setVisible(false);
+        pfeil3 = this.add.image(3220 * scale, 350 * scale, 'pfeil').setOrigin(0).setScale(arrowScale).setVisible(false);
+        pfeil4 = this.add.image(2800 * scale, 550 * scale, 'pfeil').setOrigin(0).setScale(arrowScale).setVisible(false);
+        pfeil5 = this.add.image(4005 * scale, 550 * scale, 'pfeil').setOrigin(0).setScale(arrowScale).setVisible(false);
+        pfeil6 = this.add.image(2205 * scale, 550 * scale, 'pfeil').setOrigin(0).setScale(arrowScale).setVisible(false);
 
         // Drachenanimationen
         dragonFrames = [
@@ -49,10 +59,10 @@ export default class MainScene extends Phaser.Scene {
         dragon.setVisible(true);
 
         // Tisch
-        tisch = this.add.image(2510, 789, 'tisch').setOrigin(0).setScale(1.7, 1.7).setVisible(true);
+        tisch = this.add.image(2510 * scale, 789 * scale, 'tisch').setOrigin(0).setScale(1.7 * scale, 1.7 * scale).setVisible(true);
 
         //Blumenvase
-        blumenvase = this.add.image(2860, 595, 'blumenvase').setOrigin(0).setScale(0.07, 0.07).setVisible(false);
+        blumenvase = this.add.image(2860 * scale, 595 * scale, 'blumenvase').setOrigin(0).setScale(0.07 * scale, 0.07 * scale).setVisible(false);
 
         cursors = this.input.keyboard.createCursorKeys();
 

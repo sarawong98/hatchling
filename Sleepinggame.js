@@ -22,16 +22,16 @@ export default class Sleepinggame extends Phaser.Scene {
         this.backgroundMusic = this.sound.add('sleepingMusic', { volume: 1, loop: true });
         this.backgroundMusic.play();
 
-        this.add.image(this.backgroundX, 0, 'raum').setOrigin(0);
-        this.add.image(this.backgroundX, 0, 'bett').setOrigin(0);
+        this.add.image(this.backgroundX, 0, 'raum').setOrigin(0).setScale(scale);
+        this.add.image(this.backgroundX, 0, 'bett').setOrigin(0).setScale(scale);
 
         // Drache schlafen und Zzz anzeigen
-        this.add.image(this.pfeilX - 80, 580, 'drache_schlafen').setOrigin(0);
-        this.add.image(this.pfeilX - 50, 480, 'zzz').setOrigin(0).setScale(0.5); // Kleinere Skalierung und gleiche x-Koordinate wie Drache
+        this.add.image(this.pfeilX - 80 * scale, 580 * scale, 'drache_schlafen').setOrigin(0);
+        this.add.image(this.pfeilX - 50 * scale, 480 * scale, 'zzz').setOrigin(0).setScale(0.5 * scale); // Kleinere Skalierung und gleiche x-Koordinate wie Drache
 
 
         // Interaktiver unsichtbarer Kasten als Platzhalter für den Lichtschalter
-        this.lampSwitch = this.add.rectangle(this.pfeilX - 335, 480, 110, 180, 0x000000, 0).setInteractive(); // Unsichtbarer Kasten
+        this.lampSwitch = this.add.rectangle(this.pfeilX - 335 * scale, 480 * scale, 110, 180, 0x000000, 0).setInteractive(); // Unsichtbarer Kasten
         this.lampSwitch.on('pointerdown', this.toggleLight, this);
 
         // Tag-Nacht-Wechsel-Effekt
@@ -39,7 +39,7 @@ export default class Sleepinggame extends Phaser.Scene {
         this.isNight = false; // Flag, um den Zustand der Dunkelheit zu verfolgen
 
         // Münzanzeige
-        this.add.text(16, 16, 'Coins: ' + this.totalCoins, {fontSize: '32px', fontWeight: 'bold', fill: '#000'});
+        this.add.text(16, 32, 'Coins: ' + this.totalCoins, {fontSize: '32px', fontWeight: 'bold', fill: '#000'});
     }
 
     toggleLight() {

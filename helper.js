@@ -1,11 +1,15 @@
 // Globale Variablen
+let screenWidth;
+let screenHeight;
+let scale
+
 let backgroundMusic;
 let dragon;
 let dragonFrames = [];
 let frameIndex = 0;
 let frameDelay = 0;
 let dragonX = window.innerWidth / 2;
-let dragonY = 750;
+let dragonY = window.innerHeight / 1.5;
 let dragonSpeed = 6;
 let background;
 let backgroundSpeed = 6;
@@ -16,9 +20,6 @@ let pfeil1, pfeil2, pfeil3, pfeil4, pfeil5, pfeil6;
 let tisch;
 let blumenvase;
 let selectedObject = null;
-let stars;
-let starSpeed = 200;
-let score = 0;
 let freigeschaltet = false;
 
 const xDistanceThreshold = 200; // Distanzschwelle für die Auswahl der Pfeile nach x-Koordinate
@@ -34,12 +35,12 @@ function updateDragonPosition() {
 // Update the positions of the pfeils for bobbing effect
 function updatePfeilPositions() {
     const bobSpeed = 0.07;
-    pfeil1.y = 450 + Math.sin(frameDelay * bobSpeed) * 10;
-    pfeil2.y = 450 + Math.sin((frameDelay + 10) * bobSpeed) * 10; // Slightly offset for variation
-    pfeil3.y = 350 + Math.sin((frameDelay + 20) * bobSpeed) * 10; // Slightly offset for variation
-    pfeil4.y = 550 + Math.sin((frameDelay + 30) * bobSpeed) * 10; // Slightly offset for variation
-    pfeil5.y = 550 + Math.sin((frameDelay + 40) * bobSpeed) * 10; // Slightly offset for variation
-    pfeil6.y = 550 + Math.sin((frameDelay + 50) * bobSpeed) * 10; // Slightly offset for variation
+    pfeil1.y = 450 * scale + Math.sin(frameDelay * bobSpeed) * 10;
+    pfeil2.y = 450 * scale + Math.sin((frameDelay + 10) * bobSpeed) * 10; // Slightly offset for variation
+    pfeil3.y = 350 * scale + Math.sin((frameDelay + 20) * bobSpeed) * 10; // Slightly offset for variation
+    pfeil4.y = 550 * scale + Math.sin((frameDelay + 30) * bobSpeed) * 10; // Slightly offset for variation
+    pfeil5.y = 550 * scale + Math.sin((frameDelay + 40) * bobSpeed) * 10; // Slightly offset for variation
+    pfeil6.y = 550 * scale + Math.sin((frameDelay + 50) * bobSpeed) * 10; // Slightly offset for variation
 }
 
 // Check the proximity between the dragon and each pfeil
@@ -122,7 +123,10 @@ function moveLeft() {
 // Move the dragon and background to the right
 function moveRight() {
     if (backgroundAtEdge === false) {
-        if (background.x > -background.width + window.innerWidth) {
+        console.log(background.x);
+        console.log(background.width);
+        console.log(window.innerWidth);
+        if (background.x > -background.width  * scale + window.innerWidth) {
             background.x -= backgroundSpeed;
             pfeil1.x -= backgroundSpeed;
             pfeil2.x -= backgroundSpeed;
