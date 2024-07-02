@@ -20,9 +20,9 @@ export default class Showergame extends Phaser.Scene {
     create(data) {
         this.sounds = this.sound.add('bubblePopSound', {volume: 1, loop: false});
 
-        this.add.image(this.backgroundX, 0, 'raum').setOrigin(0);
-        this.drache = this.add.image(230, 470, 'Drache_baden').setOrigin(0);
-        this.badewanne = this.add.image(0, 0, 'badewanne').setOrigin(0);
+        this.add.image(this.backgroundX, 0, 'raum').setOrigin(0).setScale(scale);
+        this.drache = this.add.image(200 * scale, 430 * scale, 'Drache_baden').setOrigin(0);
+        this.badewanne = this.add.image(0, 0, 'badewanne').setOrigin(0).setScale(scale);
 
         this.rotationSpeed = 0.025; // Rotationsgeschwindigkeit
         this.rotationDirection = 1; // Richtung der Rotation (1 für rechts, -1 für links)
@@ -42,7 +42,7 @@ export default class Showergame extends Phaser.Scene {
         this.seifenblasen = [];
 
         // Münzanzeige
-        this.add.text(16, 16, 'Coins: ' + this.totalCoins, {fontSize: '32px', fontWeight: 'bold', fill: '#000'});
+        this.add.text(16, 32, 'Coins: ' + this.totalCoins, {fontSize: '32px', fontWeight: 'bold', fill: '#000'});
     }
 
     update() {
@@ -65,17 +65,17 @@ export default class Showergame extends Phaser.Scene {
 
     createSingleSeifenblase() {
         // Zufällige Position und Größe für die Seifenblase
-        const x = Phaser.Math.Between(100, 500);
-        const y = 550;
-        const scale = Phaser.Math.FloatBetween(0.1, 0.4); // Zufällige Skalierung zwischen 0.1 und 0.5
+        const x = Phaser.Math.Between(120, 500) * scale;
+        const y = 540 * scale;
+        const scaleBubble = Phaser.Math.FloatBetween(0.1, 0.4); // Zufällige Skalierung zwischen 0.1 und 0.5
 
-        const seifenblase = this.add.image(x, y, 'seifenblase').setScale(scale);
+        const seifenblase = this.add.image(x, y, 'seifenblase').setScale(scaleBubble);
 
         // Bewegung der Seifenblase nach oben
         const speed = 50; // Zufällige Geschwindigkeit
         this.tweens.add({
             targets: seifenblase,
-            y: -50, // Zielposition (aus dem Bildschirm)
+            y: -50 * scale, // Zielposition (aus dem Bildschirm)
             duration: speed * 500, // Dauer basierend auf der Geschwindigkeit
             onComplete: () => {
                 // Seifenblase aus dem Array entfernen, wenn sie zerstört wird
