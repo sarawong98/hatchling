@@ -1,13 +1,15 @@
 //Minispiel2
 export default class Sleepinggame extends Phaser.Scene {
     constructor() {
-        super({ key: 'Sleepinggame' });
+        super({key: 'Sleepinggame'});
     }
 
     init(data) {
         this.backgroundX = data.backgroundX;
         this.pfeilX = data.pfeilX; // Pfeil x-Position speichern
         this.totalCoins = data.totalCoins;
+        this.homeDragonX = data.homeDragonX;
+        this.homeDragonY = data.homeDragonY;
     }
 
     preload() {
@@ -18,8 +20,8 @@ export default class Sleepinggame extends Phaser.Scene {
         this.load.audio('sleepingMusic', 'audio/sleeping-music.mp3');
     }
 
-    create(data) {
-        this.backgroundMusic = this.sound.add('sleepingMusic', { volume: 1, loop: true });
+    create() {
+        this.backgroundMusic = this.sound.add('sleepingMusic', {volume: 1, loop: true});
         this.backgroundMusic.play();
 
         this.add.image(this.backgroundX, 0, 'raum').setOrigin(0).setScale(scale);
@@ -29,14 +31,12 @@ export default class Sleepinggame extends Phaser.Scene {
         this.add.image(this.pfeilX - 80 * scale, 580 * scale, 'drache_schlafen').setOrigin(0);
         this.add.image(this.pfeilX - 50 * scale, 480 * scale, 'zzz').setOrigin(0).setScale(0.5 * scale); // Kleinere Skalierung und gleiche x-Koordinate wie Drache
 
-
         // Interaktiver unsichtbarer Kasten als Platzhalter für den Lichtschalter
         this.lampSwitch = this.add.rectangle(this.pfeilX - 335 * scale, 480 * scale, 110, 180, 0x000000, 0).setInteractive(); // Unsichtbarer Kasten
         this.lampSwitch.on('pointerdown', this.toggleLight, this);
 
         // Tag-Nacht-Wechsel-Effekt
         this.nightOverlay = this.add.rectangle(0, 0, window.innerWidth, window.innerHeight, 0x000000).setOrigin(0).setAlpha(0);
-        this.isNight = false; // Flag, um den Zustand der Dunkelheit zu verfolgen
 
         // Münzanzeige
         this.add.text(16, 32, 'Coins: ' + this.totalCoins, {fontSize: '32px', fontWeight: 'bold', fill: '#000'});
@@ -50,7 +50,6 @@ export default class Sleepinggame extends Phaser.Scene {
                 alpha: 0.9,
                 duration: 2000,
             });
-            this.isNight = true;
         } else {
             // Tagmodus aktivieren
             this.tweens.add({
@@ -59,10 +58,13 @@ export default class Sleepinggame extends Phaser.Scene {
                 duration: 2000,
                 onComplete: () => {
                     this.backgroundMusic.stop();
-                    this.scene.start('MainScene');
+                    this.scene.start('MainScene', {
+                        backgroundX: background.x,
+                        homeDragonX: this.homeDragonX,
+                        homeDragonY: this.homeDragonY
+                    });
                 }
             });
-            this.isNight = false;
         }
     }
 }

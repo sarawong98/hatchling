@@ -14,6 +14,12 @@ export default class Memorygame extends Phaser.Scene {
         this.cardSound = null;
     }
 
+    init(data) {
+        this.homeDragonX = data.homeDragonX;
+        this.homeDragonY = data.homeDragonY;
+        this.backgroundX = data.backgroundX;
+    }
+
     preload() {
         this.load.svg('memoryBackground', 'Komponenten/memoryBackground.svg');
         this.load.svg('cardBack', 'Komponenten/cards/cardBack.svg');
@@ -130,16 +136,11 @@ export default class Memorygame extends Phaser.Scene {
             this.firstCard = null;
             this.secondCard = null;
 
-            console.log(this.totalFlippedCards);
-            console.log(this.totalFlippedCards === this.anzahlPaare);
-
             // Überprüfen, ob alle Karten aufgedeckt wurden
             if (this.totalFlippedCards === this.anzahlPaare) {
                 this.memoryVictory();
             }
         } else {
-            console.log(this.totalFlippedCards);
-
             // Karten nach kurzer Zeit wieder umdrehen und Leben verringern
             this.time.delayedCall(1000, () => {
                 this.firstCard.setTexture('cardBack');

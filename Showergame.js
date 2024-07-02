@@ -5,6 +5,8 @@ export default class Showergame extends Phaser.Scene {
     }
 
     init(data) {
+        this.homeDragonX = data.homeDragonX;
+        this.homeDragonY = data.homeDragonY;
         this.backgroundX = data.backgroundX;
         this.totalCoins = data.totalCoins;
     }
@@ -104,7 +106,11 @@ export default class Showergame extends Phaser.Scene {
 
     // Zurück zur Hauptszene wechseln
     returnToMainScene() {
-        this.scene.stop('Showergame');
+        this.scene.stop('Showergame', {
+            backgroundX: background.x,
+            homeDragonX: this.homeDragonX,
+            homeDragonY: this.homeDragonY
+        });
     }
 
     // Aufräumen bei Beendigung der Szene

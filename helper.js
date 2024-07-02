@@ -123,9 +123,6 @@ function moveLeft() {
 // Move the dragon and background to the right
 function moveRight() {
     if (backgroundAtEdge === false) {
-        console.log(background.x);
-        console.log(background.width);
-        console.log(window.innerWidth);
         if (background.x > -background.width  * scale + window.innerWidth) {
             background.x -= backgroundSpeed;
             pfeil1.x -= backgroundSpeed;

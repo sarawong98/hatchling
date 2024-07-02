@@ -10,6 +10,12 @@ export default class Eatinggame extends Phaser.Scene {
         this.backgroundMusic = null;
     }
 
+    init(data) {
+        this.homeDragonX = data.homeDragonX;
+        this.homeDragonY = data.homeDragonY;
+        this.backgroundX = data.backgroundX;
+    }
+
     preload() {
         this.load.svg('memoryBackground', 'Komponenten/memoryBackground.svg');
         this.load.image('eatHintergrundOfenNapf', 'Komponenten/eating/eatHintergrundOfenNapf.png');
@@ -39,15 +45,19 @@ export default class Eatinggame extends Phaser.Scene {
         this.napf.setOrigin(0.5, 0.5);
 
         // Variablen für das Spiel
-        this.sliderBar = this.add.image(400, 300, 'sliderBar').setScale(0.5, 0.4);
-        this.target = this.add.rectangle(400, 300, 150, 30, 0xffff00).setVisible(false);
-        this.slider = this.add.rectangle(400, 300, 100, 20, 0xff0000);
+        this.sliderBar = this.add.image(400, 300 * scale, 'sliderBar').setScale(0.5, 0.4);
+        this.target = this.add.rectangle(400, 300 * scale, 150, 30, 0xffff00).setVisible(false);
+        this.slider = this.add.rectangle(400, 300 * scale, 100, 20, 0xff0000);
 
         this.direction = 1;
         this.speed = 200;
 
         // Text zur Anzeige der Runden
-        this.roundText = this.add.text(10, 30, 'Runde ' + this.round + ' von ' + this.totalrounds, { fontSize: '32px', fontWeight: 'bold', fill: '#ffffff' });
+        this.roundText = this.add.text(10, 30, 'Runde ' + this.round + ' von ' + this.totalrounds, {
+            fontSize: '32px',
+            fontWeight: 'bold',
+            fill: '#ffffff'
+        });
 
         // Event Listener für die Leertaste
         this.input.keyboard.on('keydown-SPACE', this.handleSpacePress, this);
@@ -66,7 +76,6 @@ export default class Eatinggame extends Phaser.Scene {
     }
 
     handleSpacePress() {
-
         if (!this.slider.visible) return;
 
         // Überprüfen, ob der Slider in der Mitte des Ziels ist
@@ -102,7 +111,11 @@ export default class Eatinggame extends Phaser.Scene {
             this.time.delayedCall(2000, () => {
                 backgroundAtEdge = false;
                 this.backgroundMusic.stop();
-                this.scene.start('MainScene');
+                this.scene.start('MainScene', {
+                    backgroundX: background.x,
+                    homeDragonX: this.homeDragonX,
+                    homeDragonY: this.homeDragonY
+                });
             });
         } else {
             // Nächste Runde vorbereiten
@@ -110,7 +123,7 @@ export default class Eatinggame extends Phaser.Scene {
             this.time.delayedCall(1500, () => {
                 this.roundText.setText('Runde ' + this.round + ' von ' + this.totalrounds);
                 this.keule.setTexture('roheKeule');
-                this.slider.setPosition(400, 300); // Slider wieder in die Mitte setzen
+                this.slider.setPosition(400, 300 * scale); // Slider wieder in die Mitte setzen
                 this.sliderBar.setVisible(true);
                 this.slider.setVisible(true);
                 this.slider.active = true;

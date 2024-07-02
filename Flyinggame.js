@@ -15,6 +15,12 @@ export default class Flyinggame extends Phaser.Scene {
         this.backgroundMusic = null;
     }
 
+    init(data) {
+        this.homeDragonX = data.homeDragonX;
+        this.homeDragonY = data.homeDragonY;
+        this.backgroundX = data.backgroundX;
+    }
+
     preload() {
         this.load.svg('drache_oben', 'Komponenten/Drache_rechts_oben.svg');
         this.load.svg('drache_mitte2', 'Komponenten/Drache_rechts_mitte2.svg');
@@ -30,7 +36,7 @@ export default class Flyinggame extends Phaser.Scene {
         this.score = 0;
 
         // Create and play the background music
-        this.backgroundMusic = this.sound.add('gameMusic', { volume: 1, loop: true });
+        this.backgroundMusic = this.sound.add('gameMusic', {volume: 1, loop: true});
         this.backgroundMusic.play();
 
         var image = this.add.image(this.cameras.main.width / 2, this.cameras.main.height / 2, 'sky');
@@ -87,7 +93,12 @@ export default class Flyinggame extends Phaser.Scene {
     update() {
         if (this.gameover) {
             this.backgroundMusic.stop();
-            this.scene.start('Gameover', {finalScore: this.score});
+            this.scene.start('Gameover', {
+                finalScore: this.score,
+                backgroundX: background.x,
+                homeDragonX: this.homeDragonX,
+                homeDragonY: this.homeDragonY
+            });
         }
 
         this.dragonFrames.forEach(frame => frame.y = this.dragon.y);
@@ -106,7 +117,7 @@ export default class Flyinggame extends Phaser.Scene {
         // Sync hidden player's position with the visible dragon
         this.player.y = this.dragon.y;
 
-        // Check if any ring goes off screen
+        // Check if any ring goes offscreen
         this.ringsFront.children.iterate((ring) => {
             if (ring.x < 5) {
                 this.gameover = true;

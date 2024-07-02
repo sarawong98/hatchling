@@ -2,12 +2,21 @@ export default class MainScene extends Phaser.Scene {
     constructor() {
         super({ key: 'MainScene' });
         this.totalCoins = 0;
+        this.homeDragonX = dragonX;
+        this.homeDragonY = dragonY;
+        this.backgroundX = 0;
     }
 
-    init() {
+    init(data) {
         // Get screen dimensions
         screenWidth = this.cameras.main.width;
         screenHeight = this.cameras.main.height;
+
+        // Set dragon position from data if available
+        if (data && data.homeDragonX !== undefined && data.homeDragonY !== undefined) {
+            this.homeDragonX = data.homeDragonX;
+            this.homeDragonY = data.homeDragonY;
+        }
     }
 
     preload() {
@@ -34,35 +43,35 @@ export default class MainScene extends Phaser.Scene {
         this.backgroundMusic.play();
 
         // Hintergrund und Pfeile
-        var image = this.add.image(0, 0, 'raum').setOrigin(0);
+        var image = this.add.image(this.backgroundX, 0, 'raum').setOrigin(0);
         scale = this.cameras.main.height / image.height;
         background = image.setScale(scale);
 
         var arrowScale = 0.4  * scale; // Arbitrary scale based on screen height
-        pfeil1 = this.add.image(250 * scale, 450 * scale, 'pfeil').setOrigin(0).setScale(arrowScale).setVisible(false);
-        pfeil2 = this.add.image(1250 * scale, 450 * scale, 'pfeil').setOrigin(0).setScale(arrowScale).setVisible(false);
-        pfeil3 = this.add.image(3220 * scale, 350 * scale, 'pfeil').setOrigin(0).setScale(arrowScale).setVisible(false);
-        pfeil4 = this.add.image(2800 * scale, 550 * scale, 'pfeil').setOrigin(0).setScale(arrowScale).setVisible(false);
-        pfeil5 = this.add.image(4005 * scale, 550 * scale, 'pfeil').setOrigin(0).setScale(arrowScale).setVisible(false);
-        pfeil6 = this.add.image(2205 * scale, 550 * scale, 'pfeil').setOrigin(0).setScale(arrowScale).setVisible(false);
+        pfeil1 = this.add.image(250 * scale + this.backgroundX, 450 * scale, 'pfeil').setOrigin(0).setScale(arrowScale).setVisible(false);
+        pfeil2 = this.add.image(1250 * scale + this.backgroundX, 450 * scale, 'pfeil').setOrigin(0).setScale(arrowScale).setVisible(false);
+        pfeil3 = this.add.image(3220 * scale + this.backgroundX, 350 * scale, 'pfeil').setOrigin(0).setScale(arrowScale).setVisible(false);
+        pfeil4 = this.add.image(2800 * scale + this.backgroundX, 550 * scale, 'pfeil').setOrigin(0).setScale(arrowScale).setVisible(false);
+        pfeil5 = this.add.image(4005 * scale + this.backgroundX, 550 * scale, 'pfeil').setOrigin(0).setScale(arrowScale).setVisible(false);
+        pfeil6 = this.add.image(2205 * scale + this.backgroundX, 550 * scale, 'pfeil').setOrigin(0).setScale(arrowScale).setVisible(false);
 
         // Drachenanimationen
         dragonFrames = [
-            this.add.image(dragonX, dragonY, 'drache_oben').setVisible(false),
-            this.add.image(dragonX, dragonY, 'drache_mitte2').setVisible(false),
-            this.add.image(dragonX, dragonY, 'drache_mitte').setVisible(false),
-            this.add.image(dragonX, dragonY, 'drache_unten').setVisible(false),
-            this.add.image(dragonX, dragonY, 'drache_mitte').setVisible(false),
-            this.add.image(dragonX, dragonY, 'drache_mitte2').setVisible(false)
+            this.add.image(this.homeDragonX, this.homeDragonY, 'drache_oben').setVisible(false),
+            this.add.image(this.homeDragonX, this.homeDragonY, 'drache_mitte2').setVisible(false),
+            this.add.image(this.homeDragonX, this.homeDragonY, 'drache_mitte').setVisible(false),
+            this.add.image(this.homeDragonX, this.homeDragonY, 'drache_unten').setVisible(false),
+            this.add.image(this.homeDragonX, this.homeDragonY, 'drache_mitte').setVisible(false),
+            this.add.image(this.homeDragonX, this.homeDragonY, 'drache_mitte2').setVisible(false)
         ];
         dragon = dragonFrames[0];
         dragon.setVisible(true);
 
         // Tisch
-        tisch = this.add.image(2510 * scale, 789 * scale, 'tisch').setOrigin(0).setScale(1.7 * scale, 1.7 * scale).setVisible(true);
+        tisch = this.add.image(2510 * scale + this.backgroundX, 789 * scale, 'tisch').setOrigin(0).setScale(1.7 * scale, 1.7 * scale).setVisible(true);
 
         //Blumenvase
-        blumenvase = this.add.image(2860 * scale, 595 * scale, 'blumenvase').setOrigin(0).setScale(0.07 * scale, 0.07 * scale).setVisible(false);
+        blumenvase = this.add.image(2860 * scale + this.backgroundX, 595 * scale, 'blumenvase').setOrigin(0).setScale(0.07 * scale, 0.07 * scale).setVisible(false);
 
         cursors = this.input.keyboard.createCursorKeys();
 
@@ -79,22 +88,25 @@ export default class MainScene extends Phaser.Scene {
 
         // Starten der Minispiele durch Leertaste
         this.input.keyboard.on('keydown-SPACE', () => {
+            this.backgroundX = background.x;
+            this.homeDragonX = dragon.x;
+            this.homeDragonY = dragon.y;
             if (selectedObject === 'pfeil1') {
-                this.scene.launch('Showergame', { backgroundX: background.x, totalCoins: this.totalCoins});
+                this.scene.launch('Showergame', { backgroundX: background.x, totalCoins: this.totalCoins, homeDragonX: this.homeDragonX, homeDragonY: this.homeDragonY});
             } else if (selectedObject === 'pfeil2') {
                 this.backgroundMusic.stop();
-                this.scene.start('Sleepinggame', { backgroundX: background.x, pfeilX: pfeil2.x , totalCoins: this.totalCoins});
+                this.scene.start('Sleepinggame', { backgroundX: background.x, pfeilX: pfeil2.x , totalCoins: this.totalCoins, homeDragonX: this.homeDragonX, homeDragonY: this.homeDragonY});
             } else if (selectedObject === 'pfeil3') {
                 this.backgroundMusic.stop();
-                this.scene.start('Flyinggame');
+                this.scene.start('Flyinggame', { backgroundX: background.x, homeDragonX: this.homeDragonX, homeDragonY: this.homeDragonY });
             } else if (selectedObject === 'pfeil4') {
                 this.backgroundMusic.stop();
-                this.scene.start('Memorygame');
+                this.scene.start('Memorygame', { backgroundX: background.x, homeDragonX: this.homeDragonX, homeDragonY: this.homeDragonY });
             } else if (selectedObject === 'pfeil5') {
                 this.backgroundMusic.stop();
-                this.scene.start('Eatinggame');
+                this.scene.start('Eatinggame', { backgroundX: background.x, homeDragonX: this.homeDragonX, homeDragonY: this.homeDragonY });
             } else if (selectedObject === 'pfeil6') {
-                this.scene.launch('Shopgame');
+                this.scene.launch('Shopgame', { backgroundX: background.x, homeDragonX: this.homeDragonX, homeDragonY: this.homeDragonY });
             }
         });
     }

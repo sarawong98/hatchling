@@ -1,7 +1,13 @@
 export default class Gameover extends Phaser.Scene {
     constructor() {
-        super({ key: 'Gameover' });
+        super({key: 'Gameover'});
         this.coins = 0;
+    }
+
+    init(data) {
+        this.homeDragonX = data.homeDragonX;
+        this.homeDragonY = data.homeDragonY;
+        this.backgroundX = data.backgroundX;
     }
 
     create(data) {
@@ -21,7 +27,12 @@ export default class Gameover extends Phaser.Scene {
 
         // Delay before restarting the main scene
         this.time.delayedCall(3000, () => {
-            this.scene.start('MainScene', {collectedCoins: this.coins});
+            this.scene.start('MainScene', {
+                collectedCoins: this.coins,
+                backgroundX: background.x,
+                homeDragonX: this.homeDragonX,
+                homeDragonY: this.homeDragonY
+            });
         });
     }
 
