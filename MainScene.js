@@ -132,7 +132,7 @@ export default class MainScene extends Phaser.Scene {
                 this.backgroundMusic.stop();
                 this.scene.start('Eatinggame', { backgroundX: background.x, homeDragonX: this.homeDragonX, homeDragonY: this.homeDragonY });
             } else if (selectedObject === 'pfeil6') {
-                this.scene.launch('Shopgame', { backgroundX: background.x, homeDragonX: this.homeDragonX, homeDragonY: this.homeDragonY });
+                this.scene.launch('Shopgame', { backgroundX: background.x, totalCoins: this.totalCoins, homeDragonX: this.homeDragonX, homeDragonY: this.homeDragonY });
             }
         });
     }

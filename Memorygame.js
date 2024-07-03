@@ -179,21 +179,16 @@ export default class Memorygame extends Phaser.Scene {
 
     memoryVictory() {
         var collectedCoins = 0;
-
         this.add.text(this.cameras.main.width / 2, this.cameras.main.height / 2, 'Victory', { fontSize: '64px', fontFamily: 'Arial', fontWeight: 'bold', fill: '#ffffff' }).setOrigin(0.5);
-        if (!freigeschaltet){
-            this.add.text(this.cameras.main.width / 2, this.cameras.main.height / 2 + 100, 'Du hast eine Blumenvase freigeschaltet', { fontSize: '64px', fontFamily: 'Arial', fontWeight: 'bold', fill: '#ffffff' }).setOrigin(0.5);
-        } else {
-            collectedCoins += 5;
-            this.add.text(this.cameras.main.width / 2, this.cameras.main.height / 2 + 100, 'Gesammelte Münzen: 5', { fontSize: '64px', fontFamily: 'Arial', fontWeight: 'bold', fill: '#ffffff' }).setOrigin(0.5);
-        }
+        collectedCoins += 5;
+        this.add.text(this.cameras.main.width / 2, this.cameras.main.height / 2 + 100, 'Gesammelte Münzen: 5', { fontSize: '64px', fontFamily: 'Arial', fontWeight: 'bold', fill: '#ffffff' }).setOrigin(0.5);
+
         this.cards.getChildren().forEach(card => {
             card.disableInteractive();
         });
         this.time.delayedCall(3000, () => {
             this.lives = 10;
             this.totalFlippedCards = 0;
-            freigeschaltet = true;
             this.backgroundMusic.stop();
             this.scene.start('MainScene', {collectedCoins: collectedCoins});
         });
@@ -232,7 +227,7 @@ export default class Memorygame extends Phaser.Scene {
         this.tutorialText = this.add.text(
             this.cameras.main.width / 2,
             marginTop + boxHeight / 2,
-            'Steuerung:\n\nSpiele eine Runde Memory um Münzen und Boni zu verdienen.\nSuche die Paare und decke sie auf.',
+            'Steuerung:\n\nSpiele eine Runde Memory um Münzen zu verdienen.\nSuche die Paare und decke sie auf.',
             { fontSize: '24px', fill: '#000000', align: 'center', wordWrap: { width: boxWidth - boxPadding * 2 } }
         );
         this.tutorialText.setOrigin(0.5);
