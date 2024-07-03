@@ -44,7 +44,7 @@ export default class Showergame extends Phaser.Scene {
         this.seifenblasen = [];
 
         // Münzanzeige Hintergrundkasten
-        const coinsBoxWidth = 180;
+        const coinsBoxWidth = 220;
         const coinsBoxHeight = 50;
         const coinsBoxPadding = 10;
         const coinsBoxMarginTop = 16;

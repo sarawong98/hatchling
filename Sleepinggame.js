@@ -42,7 +42,7 @@ export default class Sleepinggame extends Phaser.Scene {
         this.nightOverlay = this.add.rectangle(0, 0, window.innerWidth, window.innerHeight, 0x000000).setOrigin(0).setAlpha(0);
 
         // Münzanzeige Hintergrundkasten
-        const coinsBoxWidth = 180;
+        const coinsBoxWidth = 220;
         const coinsBoxHeight = 50;
         const coinsBoxPadding = 10;
         const coinsBoxMarginTop = 16;

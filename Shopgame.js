@@ -2,7 +2,6 @@ export default class Shopgame extends Phaser.Scene {
     constructor() {
         super({key: 'Shopgame'});
 
-        this.minusCoins = 0;
     }
 
     preload() {
@@ -15,13 +14,12 @@ export default class Shopgame extends Phaser.Scene {
         this.homeDragonX = data.homeDragonX;
         this.homeDragonY = data.homeDragonY;
         this.backgroundX = data.backgroundX;
-        this.coins = data.totalCoins;
+        this.totalCoins = data.totalCoins;
     }
 
     create() {
         const centerX = window.innerWidth / 2 - 400 * scale;
         const centerY = window.innerHeight / 2 - 400 * scale;
-        let coins
 
         // Create a clickable rectangle
         const rectX = centerX + 50 * scale; // X position of the rectangle
@@ -44,13 +42,15 @@ export default class Shopgame extends Phaser.Scene {
         this.input.keyboard.on('keydown-SPACE', this.beendeShop, this);
     }
     onRectangleClick() {
-        if (this.coins >= 10){
-            this.minusCoins = -10;
+        console.log(this.totalCoins);
+        if (this.totalCoins >= 10){
+            this.totalCoins -= 10;
             freigeschaltet = true;
         }
     }
 
      beendeShop() {
-         this.scene.stop('Shopgame', {collectedCoins: this.minusCoins});
+         this.scene.stop('Shopgame');
+         this.scene.resume('MainScene', { collectedCoins: -10 });
     }
 }
