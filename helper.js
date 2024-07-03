@@ -38,9 +38,9 @@ function updatePfeilPositions() {
     pfeil1.y = 450 * scale + Math.sin(frameDelay * bobSpeed) * 10;
     pfeil2.y = 450 * scale + Math.sin((frameDelay + 10) * bobSpeed) * 10; // Slightly offset for variation
     pfeil3.y = 350 * scale + Math.sin((frameDelay + 20) * bobSpeed) * 10; // Slightly offset for variation
-    pfeil4.y = 550 * scale + Math.sin((frameDelay + 30) * bobSpeed) * 10; // Slightly offset for variation
-    pfeil5.y = 550 * scale + Math.sin((frameDelay + 40) * bobSpeed) * 10; // Slightly offset for variation
-    pfeil6.y = 550 * scale + Math.sin((frameDelay + 50) * bobSpeed) * 10; // Slightly offset for variation
+    pfeil4.y = 680 * scale + Math.sin((frameDelay + 30) * bobSpeed) * 10; // Slightly offset for variation
+    pfeil5.y = 760 * scale + Math.sin((frameDelay + 40) * bobSpeed) * 10; // Slightly offset for variation
+    pfeil6.y = 50 * scale + Math.sin((frameDelay + 50) * bobSpeed) * 10; // Slightly offset for variation
 }
 
 // Check the proximity between the dragon and each pfeil

@@ -47,6 +47,7 @@ export default class MainScene extends Phaser.Scene {
         scale = this.cameras.main.height / image.height;
         background = image.setScale(scale);
 
+
         var arrowScale = 0.4  * scale; // Arbitrary scale based on screen height
         pfeil1 = this.add.image(250 * scale + this.backgroundX, 450 * scale, 'pfeil').setOrigin(0).setScale(arrowScale).setVisible(false);
         pfeil2 = this.add.image(1250 * scale + this.backgroundX, 450 * scale, 'pfeil').setOrigin(0).setScale(arrowScale).setVisible(false);
@@ -83,8 +84,33 @@ export default class MainScene extends Phaser.Scene {
             loop: true
         });
 
-        // Münzanzeige
-        this.add.text(16, 32, 'Coins: ' + this.totalCoins, { fontSize: '32px', fontWeight: 'bold', fill: '#000' });
+        // Münzanzeige Hintergrundkasten
+        const coinsBoxWidth = 180;
+        const coinsBoxHeight = 50;
+        const coinsBoxPadding = 10;
+        const coinsBoxMarginTop = 16;
+
+        const coinsBox = this.add.graphics()
+            .fillStyle(0xffffff, 1)
+            .fillRoundedRect(coinsBoxPadding, coinsBoxMarginTop, coinsBoxWidth, coinsBoxHeight, 10);
+
+        // Münzanzeige Text
+        const coinsText = this.add.text(
+            coinsBoxPadding + coinsBoxWidth / 2,
+            coinsBoxMarginTop + coinsBoxHeight / 2,
+            'Coins: ' + this.totalCoins,
+            { fontSize: '32px', fontWeight: 'bold', fill: '#000', align: 'center' }
+        );
+        coinsText.setOrigin(0.5);
+
+        // Sorge dafür, dass der Text über dem Hintergrundkasten liegt
+        coinsText.setDepth(1);
+
+        // Hintergrundkasten unter den Text legen
+        coinsBox.setDepth(0);
+
+        // Tutorial anzeigen
+        this.showTutorial();
 
         // Starten der Minispiele durch Leertaste
         this.input.keyboard.on('keydown-SPACE', () => {
@@ -126,5 +152,58 @@ export default class MainScene extends Phaser.Scene {
         frameIndex = (frameIndex + 1) % dragonFrames.length;
         dragon = dragonFrames[frameIndex];
         dragon.setVisible(true);
+    }
+
+    // Funktion zum Anzeigen des Tutorials
+    showTutorial() {
+        // Manuell festgelegte Größe für den Hintergrundkasten
+        const boxWidth = 650;
+        const boxHeight = 200;
+        const boxPadding = 20;
+        const marginTop = 100; // Abstand von der oberen Kante
+    
+        // Hintergrundkasten für das Tutorial
+        const box = this.add.graphics()
+            .fillStyle(0xffffff, 1)
+            .fillRoundedRect(this.cameras.main.width / 2 - boxWidth / 2, marginTop, boxWidth, boxHeight, 10);
+        
+        // Schließen-Button ("X")
+        const closeButton = this.add.text(
+            this.cameras.main.width / 2 + boxWidth / 2 - 20, // Position des Buttons rechts oben im Kasten
+            marginTop + 10, // Y-Position leicht nach unten versetzt
+            'X',
+            { fontSize: '24px', fill: '#FD302F', fontStyle: 'bold', align: 'center' }
+        );
+        closeButton.setOrigin(1, 0);
+        closeButton.setInteractive({ useHandCursor: true }); // Macht den Text klickbar
+    
+        // Eventlistener für den Schließen-Button
+        closeButton.on('pointerdown', () => {
+            box.setVisible(false); // Hintergrundkasten ausblenden
+            closeButton.setVisible(false); // Button ausblenden
+            this.tutorialText.setVisible(false); // Text ausblenden
+        });
+        
+        // Tutorial-Text erstellen
+        this.tutorialText = this.add.text(
+            this.cameras.main.width / 2,
+            marginTop + boxHeight / 2,
+            'Steuerung:\n\nVerwende die Pfeiltasten um\nden Drachen nach links oder rechts zu bewegen.\nDrücke die Leertaste, um ein Objekt auszuwählen.',
+            { fontSize: '24px', fill: '#000000', align: 'center', wordWrap: { width: boxWidth - boxPadding * 2 } }
+        );
+        this.tutorialText.setOrigin(0.5);
+        this.tutorialText.setDepth(2); // Über dem Hintergrundkasten
+
+        this.tutorialText.setVisible(false); // Anfangs unsichtbar
+        box.setVisible(false); // Hintergrundkasten anzeigen
+        closeButton.setVisible(false);
+    
+        // Nur beim ersten Besuch zeigen
+        if (!this.tutorialShown) {
+            this.tutorialText.setVisible(true);
+            box.setVisible(true); // Hintergrundkasten anzeigen
+            closeButton.setVisible(true); // Button anzeigen
+            this.tutorialShown = true;
+        }
     }
 }

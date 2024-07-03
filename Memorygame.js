@@ -59,6 +59,9 @@ export default class Memorygame extends Phaser.Scene {
         easyButton.on('pointerup', () => this.startGame(3, 5));
         mediumButton.on('pointerup', () => this.startGame(6, 10));
         hardButton.on('pointerup', () => this.startGame(12, 20));
+
+        // Tutorial anzeigen
+        this.showTutorial();
     }
 
     startGame(anzahlPaare, lives) {
@@ -194,5 +197,57 @@ export default class Memorygame extends Phaser.Scene {
             this.backgroundMusic.stop();
             this.scene.start('MainScene', {collectedCoins: collectedCoins});
         });
+    }
+    // Funktion zum Anzeigen des Tutorials
+    showTutorial() {
+        // Manuell festgelegte Größe für den Hintergrundkasten
+        const boxWidth = 650;
+        const boxHeight = 200;
+        const boxPadding = 20;
+        const marginTop = 100; // Abstand von der oberen Kante
+    
+        // Hintergrundkasten für das Tutorial
+        const box = this.add.graphics()
+            .fillStyle(0xffffff, 1)
+            .fillRoundedRect(this.cameras.main.width / 2 - boxWidth / 2, marginTop, boxWidth, boxHeight, 10);
+        
+        // Schließen-Button ("X")
+        const closeButton = this.add.text(
+            this.cameras.main.width / 2 + boxWidth / 2 - 20, // Position des Buttons rechts oben im Kasten
+            marginTop + 10, // Y-Position leicht nach unten versetzt
+            'X',
+            { fontSize: '24px', fill: '#FD302F', fontStyle: 'bold', align: 'center' }
+        );
+        closeButton.setOrigin(1, 0);
+        closeButton.setInteractive({ useHandCursor: true }); // Macht den Text klickbar
+    
+        // Eventlistener für den Schließen-Button
+        closeButton.on('pointerdown', () => {
+            box.setVisible(false); // Hintergrundkasten ausblenden
+            closeButton.setVisible(false); // Button ausblenden
+            this.tutorialText.setVisible(false); // Text ausblenden
+        });
+        
+        // Tutorial-Text erstellen
+        this.tutorialText = this.add.text(
+            this.cameras.main.width / 2,
+            marginTop + boxHeight / 2,
+            'Steuerung:\n\nSpiele eine Runde Memory um Münzen und Boni zu verdienen.\nSuche die Paare und decke sie auf.',
+            { fontSize: '24px', fill: '#000000', align: 'center', wordWrap: { width: boxWidth - boxPadding * 2 } }
+        );
+        this.tutorialText.setOrigin(0.5);
+        this.tutorialText.setDepth(2); // Über dem Hintergrundkasten
+
+        this.tutorialText.setVisible(false); // Anfangs unsichtbar
+        box.setVisible(false); // Hintergrundkasten anzeigen
+        closeButton.setVisible(false);
+    
+        // Nur beim ersten Besuch zeigen
+        if (!this.tutorialShown) {
+            this.tutorialText.setVisible(true);
+            box.setVisible(true); // Hintergrundkasten anzeigen
+            closeButton.setVisible(true); // Button anzeigen
+            this.tutorialShown = true;
+        }
     }
 }
