@@ -59,7 +59,7 @@ export default class Flyinggame extends Phaser.Scene {
 
         // Set collision box to a minimum für 3D-Effect
         this.player.body.setSize(this.dragon.width * 0.01, this.dragon.height * 0.01);
-        this.player.body.setOffset(-50, 0);
+        this.player.body.setOffset(-40, 0);
 
         // Input Events
         this.cursors = this.input.keyboard.createCursorKeys();
@@ -190,7 +190,7 @@ export default class Flyinggame extends Phaser.Scene {
         this.tutorialText = this.add.text(
             this.cameras.main.width / 2,
             marginTop + boxHeight / 2,
-            'Steuerung:\n\nFlugstunde mit deinem Drachen. Verwende die Pfeiltasten um\nden Drachen nach oben oder unten zu bewegen\n und fliege durch alle Ringe durch um Münzen zu sammeln.',
+            'Flugstunde mit deinem Drachen.\nVerwende die Pfeiltasten, um den Drachen nach oben oder unten zu bewegen\n und fliege durch alle Ringe durch um Münzen zu sammeln.\nFür alle 5 Ringe erhälst du eine Münze.',
             { fontSize: '24px', fill: '#000000', align: 'center', wordWrap: { width: boxWidth - boxPadding * 2 } }
         );
         this.tutorialText.setOrigin(0.5);
