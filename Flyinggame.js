@@ -67,6 +67,9 @@ export default class Flyinggame extends Phaser.Scene {
         // The score
         this.scoreText = this.add.text(16, 16, 'Score: 0', {fontSize: '32px', fill: '#000'});
 
+        // Tutorial anzeigen
+        this.showTutorial();
+
         // Animation of the wings
         this.time.addEvent({
             delay: 250, // switch every 250 ms
@@ -152,5 +155,57 @@ export default class Flyinggame extends Phaser.Scene {
         // Score update
         this.score += 1;
         this.scoreText.setText('Score: ' + this.score);
+    }
+    // Funktion zum Anzeigen des Tutorials
+    showTutorial() {
+        // Manuell festgelegte Größe für den Hintergrundkasten
+        const boxWidth = 650;
+        const boxHeight = 200;
+        const boxPadding = 20;
+        const marginTop = 100; // Abstand von der oberen Kante
+    
+        // Hintergrundkasten für das Tutorial
+        const box = this.add.graphics()
+            .fillStyle(0xffffff, 1)
+            .fillRoundedRect(this.cameras.main.width / 2 - boxWidth / 2, marginTop, boxWidth, boxHeight, 10);
+        
+        // Schließen-Button ("X")
+        const closeButton = this.add.text(
+            this.cameras.main.width / 2 + boxWidth / 2 - 20, // Position des Buttons rechts oben im Kasten
+            marginTop + 10, // Y-Position leicht nach unten versetzt
+            'X',
+            { fontSize: '24px', fill: '#FD302F', fontStyle: 'bold', align: 'center' }
+        );
+        closeButton.setOrigin(1, 0);
+        closeButton.setInteractive({ useHandCursor: true }); // Macht den Text klickbar
+    
+        // Eventlistener für den Schließen-Button
+        closeButton.on('pointerdown', () => {
+            box.setVisible(false); // Hintergrundkasten ausblenden
+            closeButton.setVisible(false); // Button ausblenden
+            this.tutorialText.setVisible(false); // Text ausblenden
+        });
+        
+        // Tutorial-Text erstellen
+        this.tutorialText = this.add.text(
+            this.cameras.main.width / 2,
+            marginTop + boxHeight / 2,
+            'Steuerung:\n\nFlugstunde mit deinem Drachen. Verwende die Pfeiltasten um\nden Drachen nach oben oder unten zu bewegen\n und fliege durch alle Ringe durch um Münzen zu sammeln.',
+            { fontSize: '24px', fill: '#000000', align: 'center', wordWrap: { width: boxWidth - boxPadding * 2 } }
+        );
+        this.tutorialText.setOrigin(0.5);
+        this.tutorialText.setDepth(2); // Über dem Hintergrundkasten
+
+        this.tutorialText.setVisible(false); // Anfangs unsichtbar
+        box.setVisible(false); // Hintergrundkasten anzeigen
+        closeButton.setVisible(false);
+    
+        // Nur beim ersten Besuch zeigen
+        if (!this.tutorialShown) {
+            this.tutorialText.setVisible(true);
+            box.setVisible(true); // Hintergrundkasten anzeigen
+            closeButton.setVisible(true); // Button anzeigen
+            this.tutorialShown = true;
+        }
     }
 }

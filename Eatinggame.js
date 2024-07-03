@@ -59,6 +59,9 @@ export default class Eatinggame extends Phaser.Scene {
             fill: '#ffffff'
         });
 
+        // Tutorial anzeigen
+        this.showTutorial();
+
         // Event Listener für die Leertaste
         this.input.keyboard.on('keydown-SPACE', this.handleSpacePress, this);
     }
@@ -127,6 +130,58 @@ export default class Eatinggame extends Phaser.Scene {
                 this.slider.setVisible(true);
                 this.slider.active = true;
             });
+        }
+    }
+    // Funktion zum Anzeigen des Tutorials
+    showTutorial() {
+        // Manuell festgelegte Größe für den Hintergrundkasten
+        const boxWidth = 650;
+        const boxHeight = 200;
+        const boxPadding = 20;
+        const marginTop = 40; // Abstand von der oberen Kante
+    
+        // Hintergrundkasten für das Tutorial
+        const box = this.add.graphics()
+            .fillStyle(0xffffff, 1)
+            .fillRoundedRect(this.cameras.main.width / 2 - boxWidth / 2, marginTop, boxWidth, boxHeight, 10);
+        
+        // Schließen-Button ("X")
+        const closeButton = this.add.text(
+            this.cameras.main.width / 2 + boxWidth / 2 - 20, // Position des Buttons rechts oben im Kasten
+            marginTop + 10, // Y-Position leicht nach unten versetzt
+            'X',
+            { fontSize: '24px', fill: '#FD302F', fontStyle: 'bold', align: 'center' }
+        );
+        closeButton.setOrigin(1, 0);
+        closeButton.setInteractive({ useHandCursor: true }); // Macht den Text klickbar
+    
+        // Eventlistener für den Schließen-Button
+        closeButton.on('pointerdown', () => {
+            box.setVisible(false); // Hintergrundkasten ausblenden
+            closeButton.setVisible(false); // Button ausblenden
+            this.tutorialText.setVisible(false); // Text ausblenden
+        });
+        
+        // Tutorial-Text erstellen
+        this.tutorialText = this.add.text(
+            this.cameras.main.width / 2,
+            marginTop + boxHeight / 2,
+            'Steuerung:\n\nDrücke die Leertaste, wenn sich der rote Balken im markierten Bereich befindet, um das Fleisch zu braten. Doch pass auf, dass es nicht verbrennt.',
+            { fontSize: '24px', fill: '#000000', align: 'center', wordWrap: { width: boxWidth - boxPadding * 2 } }
+        );
+        this.tutorialText.setOrigin(0.5);
+        this.tutorialText.setDepth(2); // Über dem Hintergrundkasten
+
+        this.tutorialText.setVisible(false); // Anfangs unsichtbar
+        box.setVisible(false); // Hintergrundkasten anzeigen
+        closeButton.setVisible(false);
+    
+        // Nur beim ersten Besuch zeigen
+        if (!this.tutorialShown) {
+            this.tutorialText.setVisible(true);
+            box.setVisible(true); // Hintergrundkasten anzeigen
+            closeButton.setVisible(true); // Button anzeigen
+            this.tutorialShown = true;
         }
     }
 }
