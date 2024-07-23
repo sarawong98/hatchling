@@ -25,6 +25,11 @@ export default class Gameover extends Phaser.Scene {
             fill: '#ffffff'
         }).setOrigin(0.5);
 
+        // On successful completion of the minigame
+        this.events.once('shutdown', () => {
+            this.scene.get('MainScene').increaseHealth(3);
+        });
+
         // Delay before restarting the main scene
         this.time.delayedCall(3000, () => {
             this.scene.start('MainScene', {
