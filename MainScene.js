@@ -5,6 +5,8 @@ export default class MainScene extends Phaser.Scene {
         this.homeDragonX = dragonX;
         this.homeDragonY = dragonY;
         this.backgroundX = 0;
+        this.health = 100; // Initial health value
+        this.healthBar = null;
     }
 
     init(data) {
@@ -84,6 +86,26 @@ export default class MainScene extends Phaser.Scene {
             loop: true
         });
 
+        // Create health bar
+        this.healthBar = this.add.graphics();
+        this.updateHealthBar();
+
+        // Create health bar title
+        const barWidth = 400;
+        const x = this.cameras.main.width - barWidth - 20; // Adjusted for small margin
+        this.healthText = this.add.text(x, 10, 'Gemütszustand', {
+            fontSize: '24px',
+            fill: '#fff'
+        });
+
+        // Set interval to reduce health every minute
+        this.time.addEvent({
+            delay: 60000, // 60000 ms = 1 minute
+            callback: this.reduceHealth,
+            callbackScope: this,
+            loop: true
+        });
+
         // Münzanzeige Hintergrundkasten
         const coinsBoxWidth = 220;
         const coinsBoxHeight = 50;
@@ -152,6 +174,49 @@ export default class MainScene extends Phaser.Scene {
         frameIndex = (frameIndex + 1) % dragonFrames.length;
         dragon = dragonFrames[frameIndex];
         dragon.setVisible(true);
+    }
+
+    updateHealthBar() {
+        this.healthBar.clear();
+
+        console.log(this.health);
+        let color;
+        if (this.health > 60) {
+            color = 0x7f8d44; // Green
+        } else if (this.health > 30) {
+            color = 0xe78a36; // Yellow
+        } else {
+            color = 0xb9471e; // Red
+        }
+        // Position of the health bar
+
+        const barWidth = 400;
+        const barHeight = 30;
+        const x = this.cameras.main.width - barWidth - 20; // Adjusted for small margin
+        const y = 40; // Small margin from the top
+
+        // Draw the health bar background (black border)
+        this.healthBar.fillStyle(0x000000, 1);
+        this.healthBar.fillRoundedRect(x, y, barWidth, barHeight, 10);
+
+        // Draw the health bar
+        this.healthBar.fillStyle(color, 1);
+        this.healthBar.fillRoundedRect(x + 2, y + 2, (barWidth - 4) * (this.health / 100), barHeight - 4, 8); // Slightly smaller to create a border effect
+    }
+
+    reduceHealth() {
+        if (this.health > 5) {
+            this.health -= 5;
+            this.updateHealthBar();
+        }
+    }
+
+    increaseHealth(amount) {
+        this.health = Math.min(this.health + amount, 100);
+    }
+
+    increaseCoins(amount) {
+        this.totalCoins += amount;
     }
 
     // Funktion zum Anzeigen des Tutorials

@@ -111,6 +111,12 @@ export default class Eatinggame extends Phaser.Scene {
             }
             this.round = 1;
             this.treffer = 0;
+
+            // On successful completion of the minigame
+            this.events.once('shutdown', () => {
+                this.scene.get('MainScene').increaseHealth(10); // Increase health by 20
+            });
+
             this.time.delayedCall(2000, () => {
                 this.backgroundMusic.stop();
                 this.scene.start('MainScene', {

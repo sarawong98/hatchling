@@ -55,7 +55,7 @@ export default class Sleepinggame extends Phaser.Scene {
         const coinsText = this.add.text(
             coinsBoxPadding + coinsBoxWidth / 2,
             coinsBoxMarginTop + coinsBoxHeight / 2,
-            'Coins: ' + this.totalCoins,
+            'Münzen: ' + this.totalCoins,
             {fontSize: '32px', fontWeight: 'bold', fill: '#000', align: 'center'}
         );
         coinsText.setOrigin(0.5);
@@ -87,6 +87,11 @@ export default class Sleepinggame extends Phaser.Scene {
                     alpha: 0,
                     duration: 2000,
                     onComplete: () => {
+                        // On successful completion of the minigame
+                        this.events.once('shutdown', () => {
+                            this.scene.get('MainScene').increaseHealth(10); // Increase health by 20
+                        });
+
                         this.backgroundMusic.stop();
                         this.scene.start('MainScene', {
                             backgroundX: background.x,

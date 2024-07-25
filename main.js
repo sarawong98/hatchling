@@ -12,7 +12,6 @@ const config = {
     type: Phaser.AUTO,
     width: window.innerWidth,
     height: window.innerHeight,
-    backgroundColor: '#87CEEB',
     parent: 'game-container',
     pixelArt: true,
     scene: [MainScene, Showergame, Sleepinggame, Flyinggame, Gameover, Memorygame, Eatinggame, Shopgame],

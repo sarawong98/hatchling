@@ -186,11 +186,18 @@ export default class Memorygame extends Phaser.Scene {
         this.cards.getChildren().forEach(card => {
             card.disableInteractive();
         });
+
+        // On successful completion of the minigame
+        this.events.once('shutdown', () => {
+            this.scene.get('MainScene').increaseHealth(3);
+            this.scene.get('MainScene').increaseCoins(collectedCoins);
+        });
+
         this.time.delayedCall(3000, () => {
             this.lives = 10;
             this.totalFlippedCards = 0;
             this.backgroundMusic.stop();
-            this.scene.start('MainScene', {collectedCoins: collectedCoins});
+            this.scene.start('MainScene');
         });
     }
     // Funktion zum Anzeigen des Tutorials
