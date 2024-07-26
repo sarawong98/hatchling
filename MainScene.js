@@ -154,7 +154,7 @@ export default class MainScene extends Phaser.Scene {
                 this.backgroundMusic.stop();
                 this.scene.start('Eatinggame', { backgroundX: background.x, homeDragonX: this.homeDragonX, homeDragonY: this.homeDragonY });
             } else if (selectedObject === 'pfeil6') {
-                this.scene.launch('Shopgame', { backgroundX: background.x, homeDragonX: this.homeDragonX, homeDragonY: this.homeDragonY });
+                this.scene.launch('Shopgame', { backgroundX: background.x, homeDragonX: this.homeDragonX, homeDragonY: this.homeDragonY, totalCoins: this.totalCoins });
             }
         });
     }
@@ -213,6 +213,10 @@ export default class MainScene extends Phaser.Scene {
 
     increaseHealth(amount) {
         this.health = Math.min(this.health + amount, 100);
+    }
+
+    reduceCoins(amount) {
+        this.totalCoins -= amount;
     }
 
     increaseCoins(amount) {
