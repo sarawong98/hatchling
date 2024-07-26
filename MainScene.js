@@ -190,7 +190,6 @@ export default class MainScene extends Phaser.Scene {
     updateHealthBar() {
         this.healthBar.clear();
 
-        console.log(this.health);
         let color;
         if (this.health > 60) {
             color = 0x7f8d44; // Green
