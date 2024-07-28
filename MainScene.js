@@ -24,6 +24,7 @@ export default class MainScene extends Phaser.Scene {
     preload() {
         this.load.svg('raum', 'Komponenten/raum.svg');
         this.load.svg('pfeil', 'Komponenten/pfeil.svg');
+        this.load.svg('thermometer', 'Komponenten/thermometer.svg')
         this.load.svg('drache_oben', 'Komponenten/Drache_rechts_oben.svg');
         this.load.svg('drache_mitte2', 'Komponenten/Drache_rechts_mitte2.svg');
         this.load.svg('drache_mitte', 'Komponenten/Drache_rechts_mitte.svg');
@@ -69,6 +70,8 @@ export default class MainScene extends Phaser.Scene {
         ];
         dragon = dragonFrames[0];
         dragon.setVisible(true);
+
+        thermometer = this.add.image(this.homeDragonX, this.homeDragonY - 120, 'thermometer').setOrigin(0).setScale(1.7 * scale, 1.7 * scale).setVisible(false);
 
         // Tisch
         tisch = this.add.image(2510 * scale + this.backgroundX, 789 * scale, 'tisch').setOrigin(0).setScale(1.7 * scale, 1.7 * scale).setVisible(true);
@@ -196,6 +199,7 @@ export default class MainScene extends Phaser.Scene {
         } else if (this.health > 30) {
             color = 0xe78a36; // Yellow
         } else {
+            thermometer.setVisible(true);
             color = 0xb9471e; // Red
         }
 
