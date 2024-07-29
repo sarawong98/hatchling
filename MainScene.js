@@ -24,6 +24,7 @@ export default class MainScene extends Phaser.Scene {
     preload() {
         this.load.svg('raum', 'Komponenten/raum.svg');
         this.load.svg('pfeil', 'Komponenten/pfeil.svg');
+        this.load.svg('thermometer', 'Komponenten/thermometer.svg')
         this.load.svg('drache_oben', 'Komponenten/Drache_rechts_oben.svg');
         this.load.svg('drache_mitte2', 'Komponenten/Drache_rechts_mitte2.svg');
         this.load.svg('drache_mitte', 'Komponenten/Drache_rechts_mitte.svg');
@@ -69,6 +70,8 @@ export default class MainScene extends Phaser.Scene {
         ];
         dragon = dragonFrames[0];
         dragon.setVisible(true);
+
+        thermometer = this.add.image(this.homeDragonX, this.homeDragonY - 120, 'thermometer').setOrigin(0).setScale(1.7 * scale, 1.7 * scale).setVisible(false);
 
         // Tisch
         tisch = this.add.image(2510 * scale + this.backgroundX, 789 * scale, 'tisch').setOrigin(0).setScale(1.7 * scale, 1.7 * scale).setVisible(true);
@@ -134,6 +137,9 @@ export default class MainScene extends Phaser.Scene {
         // Tutorial anzeigen
         this.showTutorial();
 
+        // Create infobox
+        this.createInfoBox();
+
         // Starten der Minispiele durch Leertaste
         this.input.keyboard.on('keydown-SPACE', () => {
             this.backgroundX = background.x;
@@ -145,16 +151,24 @@ export default class MainScene extends Phaser.Scene {
                 this.backgroundMusic.stop();
                 this.scene.start('Sleepinggame', { backgroundX: background.x, pfeilX: pfeil2.x , totalCoins: this.totalCoins, homeDragonX: this.homeDragonX, homeDragonY: this.homeDragonY});
             } else if (selectedObject === 'pfeil3') {
-                this.backgroundMusic.stop();
-                this.scene.start('Flyinggame', { backgroundX: background.x, homeDragonX: this.homeDragonX, homeDragonY: this.homeDragonY });
+                if (this.isEnoughHealth()) {
+                    this.backgroundMusic.stop();
+                    this.scene.start('Flyinggame', { backgroundX: background.x, homeDragonX: this.homeDragonX, homeDragonY: this.homeDragonY });
+                } else {
+                    this.showInfoBox();
+                }
             } else if (selectedObject === 'pfeil4') {
-                this.backgroundMusic.stop();
-                this.scene.start('Memorygame', { backgroundX: background.x, homeDragonX: this.homeDragonX, homeDragonY: this.homeDragonY });
+                if (this.isEnoughHealth()) {
+                    this.backgroundMusic.stop();
+                    this.scene.start('Memorygame', { backgroundX: background.x, homeDragonX: this.homeDragonX, homeDragonY: this.homeDragonY });
+                } else {
+                    this.showInfoBox();
+                }
             } else if (selectedObject === 'pfeil5') {
                 this.backgroundMusic.stop();
                 this.scene.start('Eatinggame', { backgroundX: background.x, homeDragonX: this.homeDragonX, homeDragonY: this.homeDragonY });
             } else if (selectedObject === 'pfeil6') {
-                this.scene.launch('Shopgame', { backgroundX: background.x, totalCoins: this.totalCoins, homeDragonX: this.homeDragonX, homeDragonY: this.homeDragonY });
+                this.scene.launch('Shopgame', { backgroundX: background.x, homeDragonX: this.homeDragonX, homeDragonY: this.homeDragonY, totalCoins: this.totalCoins });
             }
         });
     }
@@ -179,17 +193,17 @@ export default class MainScene extends Phaser.Scene {
     updateHealthBar() {
         this.healthBar.clear();
 
-        console.log(this.health);
         let color;
         if (this.health > 60) {
             color = 0x7f8d44; // Green
         } else if (this.health > 30) {
             color = 0xe78a36; // Yellow
         } else {
+            thermometer.setVisible(true);
             color = 0xb9471e; // Red
         }
-        // Position of the health bar
 
+        // Position of the health bar
         const barWidth = 400;
         const barHeight = 30;
         const x = this.cameras.main.width - barWidth - 20; // Adjusted for small margin
@@ -215,8 +229,49 @@ export default class MainScene extends Phaser.Scene {
         this.health = Math.min(this.health + amount, 100);
     }
 
+    isEnoughHealth() {
+        return this.health > 30;
+    }
+
+    reduceCoins(amount) {
+        this.totalCoins -= amount;
+    }
+
     increaseCoins(amount) {
         this.totalCoins += amount;
+    }
+
+    createInfoBox() {
+        this.infoBox = this.add.graphics();
+        const padding = 15;
+        const width = 530;
+        const height = 110;
+        const x = this.cameras.main.width / 2 - width / 2;
+        const y = this.cameras.main.height / 2 - height / 2;
+
+        this.infoBox.fillStyle(0x000000, 0.7);
+        this.infoBox.fillRect(x, y, width, height);
+        this.infoBox.lineStyle(2, 0xffffff, 1);
+        this.infoBox.strokeRect(x, y, width, height);
+        this.infoBox.setVisible(false);
+
+        this.infoText = this.add.text(x + 20, y + 20, 'Deinem Drachen geht es nicht gut.\nKümmere dich um ihn, damit er wieder mit dir spielen kann.', {
+            fontSize: '24px',
+            fill: '#fff',
+            fontStyle: 'bold',
+            align: 'center',
+            wordWrap: { width: width - padding * 2 }
+        }).setVisible(false);
+    }
+
+    showInfoBox() {
+        this.infoBox.setVisible(true);
+        this.infoText.setVisible(true);
+
+        this.time.delayedCall(5000, () => {
+            this.infoBox.setVisible(false);
+            this.infoText.setVisible(false);
+        }, [], this);
     }
 
     // Funktion zum Anzeigen des Tutorials
@@ -226,12 +281,12 @@ export default class MainScene extends Phaser.Scene {
         const boxHeight = 200;
         const boxPadding = 20;
         const marginTop = 100; // Abstand von der oberen Kante
-    
+
         // Hintergrundkasten für das Tutorial
         const box = this.add.graphics()
             .fillStyle(0xffffff, 1)
             .fillRoundedRect(this.cameras.main.width / 2 - boxWidth / 2, marginTop, boxWidth, boxHeight, 10);
-        
+
         // Schließen-Button ("X")
         const closeButton = this.add.text(
             this.cameras.main.width / 2 + boxWidth / 2 - 20, // Position des Buttons rechts oben im Kasten
@@ -241,14 +296,14 @@ export default class MainScene extends Phaser.Scene {
         );
         closeButton.setOrigin(1, 0);
         closeButton.setInteractive({ useHandCursor: true }); // Macht den Text klickbar
-    
+
         // Eventlistener für den Schließen-Button
         closeButton.on('pointerdown', () => {
             box.setVisible(false); // Hintergrundkasten ausblenden
             closeButton.setVisible(false); // Button ausblenden
             this.tutorialText.setVisible(false); // Text ausblenden
         });
-        
+
         // Tutorial-Text erstellen
         this.tutorialText = this.add.text(
             this.cameras.main.width / 2,
@@ -262,7 +317,7 @@ export default class MainScene extends Phaser.Scene {
         this.tutorialText.setVisible(false); // Anfangs unsichtbar
         box.setVisible(false); // Hintergrundkasten anzeigen
         closeButton.setVisible(false);
-    
+
         // Nur beim ersten Besuch zeigen
         if (!this.tutorialShown) {
             this.tutorialText.setVisible(true);

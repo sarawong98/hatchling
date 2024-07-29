@@ -17,6 +17,7 @@ let scene;
 let cursors;
 let backgroundAtEdge = false;
 let pfeil1, pfeil2, pfeil3, pfeil4, pfeil5, pfeil6;
+let thermometer;
 let tisch;
 let blumenvase;
 let selectedObject = null;
@@ -30,6 +31,19 @@ function updateDragonPosition() {
     const bobSpeed = 0.07;
     dragon.y = dragonY + Math.sin(frameDelay * bobSpeed) * 10;
     dragonFrames.forEach(frame => frame.y = dragon.y);
+
+    // Update thermometer position to stay with the dragon
+    const thermometerOffsetX = 5; // Adjust as needed to position the thermometer correctly
+    const thermometerOffsetY = -140; // Adjust as needed to position the thermometer correctly
+    thermometer.x = dragon.x + thermometerOffsetX;
+    thermometer.y = dragon.y + thermometerOffsetY;
+
+    // Update thermometer scale for pulsating effect
+    const scaleSpeed = 0.07; // Speed of the scaling effect
+    const maxScale = 1.8 * scale; // Maximum scale factor
+    const minScale = 1.65 * scale; // Minimum scale factor
+    const currentScale = minScale + (maxScale - minScale) * (0.5 + 0.5 * Math.sin(frameDelay * scaleSpeed));
+    thermometer.setScale(currentScale);
 }
 
 // Update the positions of the pfeils for bobbing effect

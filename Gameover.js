@@ -27,13 +27,12 @@ export default class Gameover extends Phaser.Scene {
 
         // On successful completion of the minigame
         this.events.once('shutdown', () => {
-            this.scene.get('MainScene').increaseHealth(3);
+            this.scene.get('MainScene').increaseCoins(this.coins);
         });
 
         // Delay before restarting the main scene
         this.time.delayedCall(3000, () => {
             this.scene.start('MainScene', {
-                collectedCoins: this.coins,
                 backgroundX: background.x,
                 homeDragonX: this.homeDragonX,
                 homeDragonY: this.homeDragonY

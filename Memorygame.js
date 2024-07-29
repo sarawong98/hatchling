@@ -189,7 +189,6 @@ export default class Memorygame extends Phaser.Scene {
 
         // On successful completion of the minigame
         this.events.once('shutdown', () => {
-            this.scene.get('MainScene').increaseHealth(3);
             this.scene.get('MainScene').increaseCoins(collectedCoins);
         });
 
