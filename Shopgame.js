@@ -58,8 +58,7 @@ export default class Shopgame extends Phaser.Scene {
         this.input.keyboard.on('keydown-SPACE', this.beendeShop, this);
     }
     onRectangle1Click() {
-        console.log(this.totalCoins);
-        if (this.totalCoins >= 10) {
+        if (this.totalCoins >= 10 && vaseFreigeschaltet == false) {
             this.scene.get('MainScene').reduceCoins(10);
             this.totalCoins -= 10;
             vaseFreigeschaltet = true;
@@ -67,8 +66,7 @@ export default class Shopgame extends Phaser.Scene {
     }
 
     onRectangle2Click() {
-        console.log(this.totalCoins);
-        if (this.totalCoins >= 15) {
+        if (this.totalCoins >= 15 && napfFreigeschaltet == false) {
             this.scene.get('MainScene').reduceCoins(15);
             this.totalCoins -= 15;
             napfFreigeschaltet = true;
