@@ -25,11 +25,11 @@ export default class Memorygame extends Phaser.Scene {
         this.load.svg('cardBack', 'Komponenten/cards/cardBack.svg');
         this.load.svg('card1', 'Komponenten/cards/cardBonbon.svg');
         this.load.svg('card2', 'Komponenten/cards/cardBurger.svg');
-        this.load.svg('card3', 'Komponenten/cards/cardCokkie.svg');
+        this.load.svg('card3', 'Komponenten/cards/cardFleisch.svg');
         this.load.svg('card4', 'Komponenten/cards/cardCola.svg');
         this.load.svg('card5', 'Komponenten/cards/cardDounut.svg');
         this.load.svg('card6', 'Komponenten/cards/cardEis.svg');
-        this.load.svg('card7', 'Komponenten/cards/cardFleisch.svg');
+        this.load.svg('card7', 'Komponenten/cards/cardCokkie.svg');
         this.load.svg('card8', 'Komponenten/cards/cardHotdog.svg');
         this.load.svg('card9', 'Komponenten/cards/cardKuchen.svg');
         this.load.svg('card10', 'Komponenten/cards/cardMuffin.svg');
