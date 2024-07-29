@@ -65,7 +65,6 @@ export default class Memorygame extends Phaser.Scene {
     }
 
     startGame(anzahlPaare, lives) {
-        this.add.image(0, 0, 'memoryBackground').setScale(50, 50).setOrigin(0);
 
         this.lives = lives;
         this.anzahlPaare = anzahlPaare;
@@ -73,6 +72,8 @@ export default class Memorygame extends Phaser.Scene {
 
         // Lösche die Schwierigkeitsauswahl
         this.children.removeAll();
+
+        this.add.image(0, 0, 'memoryBackground').setScale(50, 50).setOrigin(0);
 
         // Berechne die Positionen der Karten dynamisch
         const cols = 6;

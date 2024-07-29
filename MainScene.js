@@ -7,6 +7,8 @@ export default class MainScene extends Phaser.Scene {
         this.backgroundX = 0;
         this.health = 100; // Initial health value
         this.healthBar = null;
+        this.coinsBox;
+        this.coinsText;
     }
 
     init(data) {
@@ -109,30 +111,7 @@ export default class MainScene extends Phaser.Scene {
             loop: true
         });
 
-        // Münzanzeige Hintergrundkasten
-        const coinsBoxWidth = 220;
-        const coinsBoxHeight = 50;
-        const coinsBoxPadding = 10;
-        const coinsBoxMarginTop = 16;
-
-        const coinsBox = this.add.graphics()
-            .fillStyle(0xffffff, 1)
-            .fillRoundedRect(coinsBoxPadding, coinsBoxMarginTop, coinsBoxWidth, coinsBoxHeight, 10);
-
-        // Münzanzeige Text
-        const coinsText = this.add.text(
-            coinsBoxPadding + coinsBoxWidth / 2,
-            coinsBoxMarginTop + coinsBoxHeight / 2,
-            'Münzen: ' + this.totalCoins,
-            { fontSize: '32px', fontWeight: 'bold', fill: '#000', align: 'center' }
-        );
-        coinsText.setOrigin(0.5);
-
-        // Sorge dafür, dass der Text über dem Hintergrundkasten liegt
-        coinsText.setDepth(1);
-
-        // Hintergrundkasten unter den Text legen
-        coinsBox.setDepth(0);
+        this.updateCoinsText();
 
         // Tutorial anzeigen
         this.showTutorial();
@@ -190,6 +169,53 @@ export default class MainScene extends Phaser.Scene {
         dragon.setVisible(true);
     }
 
+    reduceCoins(amount) {
+        this.totalCoins -= amount;
+        this.updateCoinsText();
+    }
+
+    increaseCoins(amount) {
+        this.totalCoins += amount;
+        this.updateCoinsText();
+    }
+
+    updateCoinsText() {
+
+        // Lösche vorherige Münzanzeige, falls vorhanden
+        if (this.coinsBox) {
+            this.coinsBox.destroy();
+        }
+        if (this.coinsText) {
+            this.coinsText.destroy();
+        }
+
+        // Münzanzeige Hintergrundkasten
+        const coinsBoxWidth = 220;
+        const coinsBoxHeight = 50;
+        const coinsBoxPadding = 10;
+        const coinsBoxMarginTop = 16;
+
+        this.coinsBox = this.add.graphics()
+            .fillStyle(0xffffff, 1)
+            .fillRoundedRect(coinsBoxPadding, coinsBoxMarginTop, coinsBoxWidth, coinsBoxHeight, 10);
+
+        // Münzanzeige Text
+        this.coinsText = this.add.text(
+            coinsBoxPadding + coinsBoxWidth / 2,
+            coinsBoxMarginTop + coinsBoxHeight / 2,
+            'Münzen: ' + this.totalCoins,
+            { fontSize: '32px', fontWeight: 'bold', fill: '#000', align: 'center' }
+        );
+        this.coinsText.setOrigin(0.5);
+
+        // Sorge dafür, dass der Text über dem Hintergrundkasten liegt
+        this.coinsText.setDepth(1);
+
+        // Hintergrundkasten unter den Text legen
+        this.coinsBox.setDepth(0);
+
+    }
+
     updateHealthBar() {
         this.healthBar.clear();
 
@@ -231,14 +257,6 @@ export default class MainScene extends Phaser.Scene {
 
     isEnoughHealth() {
         return this.health > 30;
-    }
-
-    reduceCoins(amount) {
-        this.totalCoins -= amount;
-    }
-
-    increaseCoins(amount) {
-        this.totalCoins += amount;
     }
 
     createInfoBox() {

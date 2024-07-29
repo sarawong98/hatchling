@@ -44,7 +44,7 @@ export default class Shopgame extends Phaser.Scene {
     onRectangleClick() {
         console.log(this.totalCoins);
         if (this.totalCoins >= 10){
-            this.totalCoins -= 10;
+            this.scene.get('MainScene').reduceCoins(10);
             freigeschaltet = true;
         }
     }
