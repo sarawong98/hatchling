@@ -20,8 +20,10 @@ let pfeil1, pfeil2, pfeil3, pfeil4, pfeil5, pfeil6;
 let thermometer;
 let tisch;
 let blumenvase;
+let napf;
 let selectedObject = null;
-let freigeschaltet = false;
+let vaseFreigeschaltet = false;
+let napfFreigeschaltet = false;
 
 const xDistanceThreshold = 200; // Distanzschwelle für die Auswahl der Pfeile nach x-Koordinate
 
@@ -84,11 +86,16 @@ function checkSinglePfeilProximity(pfeil, pfeilName) {
     }
 }
 
-function checkBlumenvase() {
-    if (freigeschaltet) {
+function checkBlumenvaseUndNapf() {
+    if (vaseFreigeschaltet) {
         blumenvase.setVisible(true);
     } else {
         blumenvase.setVisible(false);
+    }
+    if (napfFreigeschaltet) {
+        napf.setVisible(true);
+    } else {
+        napf.setVisible(false);
     }
 }
 
@@ -123,6 +130,7 @@ function moveLeft() {
             pfeil6.x += backgroundSpeed;
             tisch.x += backgroundSpeed;
             blumenvase.x += backgroundSpeed;
+            napf.x += backgroundSpeed;
         } else {
             backgroundAtEdge = true;
         }
@@ -147,6 +155,7 @@ function moveRight() {
             pfeil6.x -= backgroundSpeed;
             tisch.x -= backgroundSpeed;
             blumenvase.x -= backgroundSpeed;
+            napf.x -= backgroundSpeed;
         } else {
             backgroundAtEdge = true;
         }

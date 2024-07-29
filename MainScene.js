@@ -33,15 +33,12 @@ export default class MainScene extends Phaser.Scene {
         this.load.svg('drache_unten', 'Komponenten/Drache_rechts_unten.svg');
         this.load.svg('tisch', 'Komponenten/tisch.svg');
         this.load.image('blumenvase', 'Komponenten/blumenvase.png');
+        this.load.image('napf', 'Komponenten/napf.png');
         this.load.audio('backgroundMusic', 'audio/cozy-homey-relaxing-music.mp3');
     }
 
     create(data) {
         scene = this;
-
-        if (data && data.collectedCoins) {
-            this.totalCoins += data.collectedCoins;
-        }
 
         // Create and play the background music
         this.backgroundMusic = this.sound.add('backgroundMusic', { volume: 1, loop: true });
@@ -80,6 +77,9 @@ export default class MainScene extends Phaser.Scene {
 
         //Blumenvase
         blumenvase = this.add.image(2860 * scale + this.backgroundX, 595 * scale, 'blumenvase').setOrigin(0).setScale(0.07 * scale, 0.07 * scale).setVisible(false);
+
+        //Napf
+        napf = this.add.image(3905 * scale + this.backgroundX, 800 * scale, 'napf').setOrigin(0).setScale(0.095 * scale, 0.095 * scale).setVisible(false);
 
         cursors = this.input.keyboard.createCursorKeys();
 
@@ -158,7 +158,7 @@ export default class MainScene extends Phaser.Scene {
         updatePfeilPositions();
         checkPfeilProximity();
         handleInput();
-        checkBlumenvase();
+        checkBlumenvaseUndNapf();
     }
 
     // Flügelanimation des Drachen
